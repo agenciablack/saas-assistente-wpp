@@ -450,6 +450,11 @@ export const Dashboard: React.FC = () => {
   const conversionRate = totalLeads > 0 ? Math.round((leadsNoGrupo / totalLeads) * 100) : 0;
   const leadsWaiting = leadsPeriodo.filter(l => l.status === 'sem_resposta').length;
 
+  // Sparkline data derived from real chart data
+  const sparkLeads = useMemo(() => filteredChartData.map(d => d.leads_total), [filteredChartData]);
+  const sparkConversao = useMemo(() => filteredChartData.map(d => d.no_grupo), [filteredChartData]);
+  const sparkAguardando = useMemo(() => filteredChartData.map(d => d.leads_total - d.no_grupo), [filteredChartData]);
+
   // Compute chart title dynamically
   const chartTitle = useMemo(() => {
     const preset = PRESETS.find(p => p.key === activePreset);
@@ -526,6 +531,7 @@ export const Dashboard: React.FC = () => {
             subtitle={kpiIsToday ? undefined : `${format(kpiRange.start, 'dd/MM')} a ${format(kpiRange.end, 'dd/MM')}`}
             icon={Users}
             color="cyan"
+            sparklineData={sparkLeads.length > 1 ? sparkLeads : undefined}
           />
         </div>
         <div className="animate-slide-up stagger-2 opacity-0 h-full">
@@ -535,6 +541,7 @@ export const Dashboard: React.FC = () => {
             subtitle={`${leadsNoGrupo} de ${totalLeads} entraram no grupo`}
             icon={TrendingUp}
             color="cyan"
+            sparklineData={sparkConversao.length > 1 ? sparkConversao : undefined}
           />
         </div>
         <div className="animate-slide-up stagger-3 opacity-0 h-full">
@@ -546,6 +553,7 @@ export const Dashboard: React.FC = () => {
             color="amber"
             trend={leadsWaiting > 5 ? 'Atencao necessaria' : 'Dentro do normal'}
             trendType={leadsWaiting > 5 ? 'negative' : 'positive'}
+            sparklineData={sparkAguardando.length > 1 ? sparkAguardando : undefined}
           />
         </div>
       </div>

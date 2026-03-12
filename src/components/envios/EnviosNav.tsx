@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Send, History, FileText } from 'lucide-react';
+import { Send, History, FileText, FlaskConical } from 'lucide-react';
 import { cn } from '../../utils/cn';
 
 const tabs = [
   { label: 'Novo Envio', path: '/envios', icon: Send, end: true },
+  { label: 'Simular Mensagem', path: '/envios/simulador', icon: FlaskConical, end: false },
   { label: 'Histórico', path: '/envios/historico', icon: History, end: false },
   { label: 'Templates', path: '/envios/templates', icon: FileText, end: false },
 ];

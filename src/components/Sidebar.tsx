@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Filter, Send, MessageSquare, MessagesSquare, Phone, Settings, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, Activity, Send, Trophy, MessageSquare, MessagesSquare, Phone, Settings, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { cn } from '../utils/cn';
 
@@ -17,8 +17,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
     { icon: MessagesSquare, label: 'Conversas', path: '/conversas' },
     { icon: Users, label: 'Leads', path: '/leads' },
-    { icon: Filter, label: 'Funil', path: '/funil' },
+    { icon: Activity, label: 'Monitoramento', path: '/funil' },
     { icon: Send, label: 'Envios', path: '/envios' },
+    { icon: Trophy, label: 'Torneios', path: '/torneios' },
     { icon: MessageSquare, label: 'Mensagens', path: '/mensagens' },
     { icon: Phone, label: 'Números', path: '/numeros' },
     { icon: Settings, label: 'Configuracoes', path: '/configuracoes' },
@@ -32,7 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.02] to-transparent pointer-events-none" />
 
-      <div className={cn("p-5 border-b border-surface-300/20 relative", collapsed && "px-3")}>
+      <div className={cn("p-5 border-b border-surface-300/20 relative h-[73px] flex items-center", collapsed && "px-3")}>
         <div className={cn("flex items-center", collapsed ? "justify-center" : "justify-between")}>
           {!collapsed && (
             <div>

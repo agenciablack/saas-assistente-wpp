@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { supabase } from '../backend/client'
-import { Search, Phone, X, Play, Pause, ChevronRight, Volume2, VolumeX, MessageSquare, Mic, Image as ImageIcon, SlidersHorizontal, Check } from 'lucide-react'
+import { Search, Phone, X, Play, Pause, Volume2, VolumeX, MessageSquare, Mic, Image as ImageIcon, SlidersHorizontal, Check, Send, Loader2 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -380,6 +380,96 @@ export default function Conversas() {
     }
   })
 
+  // Dados da conversa selecionada (precisa estar antes do bloco de envio)
+  const conversaAtual = conversas.find(c => c.telefone === selectedTel)
+
+  // ─── Envio de mensagens ───
+  const [msgTexto, setMsgTexto] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const [envioErro, setEnvioErro] = useState<string | null>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const [instanciaCache, setInstanciaCache] = useState<Record<string, { token: string; numero: string }>>({})
+
+  // Buscar dados da instância (token + numero) quando seleciona conversa
+  useEffect(() => {
+    if (!conversaAtual?.instancia) return
+    const inst = conversaAtual.instancia
+    if (instanciaCache[inst]) return
+    supabase
+      .from('whatsapp_rotacao')
+      .select('numero, token, instancia')
+      .eq('instancia', inst)
+      .single()
+      .then(({ data }) => {
+        if (data) {
+          setInstanciaCache(prev => ({ ...prev, [inst]: { token: (data as any).token, numero: (data as any).numero } }))
+        }
+      })
+  }, [conversaAtual?.instancia, instanciaCache])
+
+  const handleEnviarMensagem = useCallback(async () => {
+    const texto = msgTexto.trim()
+    if (!texto || !conversaAtual || enviando) return
+
+    const inst = conversaAtual.instancia
+    const dadosInst = instanciaCache[inst]
+    if (!dadosInst) {
+      setEnvioErro('Dados da instância não encontrados. Tente novamente.')
+      return
+    }
+
+    setEnviando(true)
+    setEnvioErro(null)
+
+    try {
+      // Enviar para webhook do n8n (ele envia via Uazapi e salva no banco)
+      const res = await fetch('http://187.77.61.4:5678/webhook/envio-saas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          telefone: conversaAtual.telefone,
+          mensagem: texto,
+          nome_lead: conversaAtual.nome || '',
+          instancia: inst,
+          token: dadosInst.token.trim(),
+          owner: dadosInst.numero,
+          lead_id: conversaAtual.lead_id,
+          status_lead: conversaAtual.status || '',
+          message_id: Array.from(crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('').toUpperCase(),
+        }),
+      })
+
+      if (!res.ok) throw new Error('Falha ao enviar mensagem')
+
+      // Limpar textarea após sucesso
+      setMsgTexto('')
+      if (textareaRef.current) {
+        textareaRef.current.style.height = '44px'
+      }
+    } catch (err: any) {
+      console.error('[Envio] Erro:', err)
+      setEnvioErro(err.message || 'Erro ao enviar mensagem')
+    } finally {
+      setEnviando(false)
+    }
+  }, [msgTexto, conversaAtual, enviando, instanciaCache])
+
+  // Auto-resize textarea
+  const handleTextareaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMsgTexto(e.target.value)
+    const el = e.target
+    el.style.height = '44px'
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px'
+  }, [])
+
+  // Enter envia, Shift+Enter quebra linha
+  const handleTextareaKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleEnviarMensagem()
+    }
+  }, [handleEnviarMensagem])
+
   // Som de notificação (beep simples gerado por Web Audio API)
   useEffect(() => {
     try {
@@ -492,9 +582,6 @@ export default function Conversas() {
     return () => { supabase.removeChannel(channel) }
   }, [selectedTel, fetchConversas, playNotif])
 
-  // Dados da conversa selecionada
-  const conversaAtual = conversas.find(c => c.telefone === selectedTel)
-
   // Filtrar lista
   const conversasFiltradas = conversas.filter(c => {
     if (busca) {
@@ -533,8 +620,8 @@ export default function Conversas() {
       <div className="flex flex-col flex-shrink-0 overflow-hidden w-[360px] border-r border-glass-border bg-surface-50/50">
 
         {/* Header */}
-        <div className="p-5 border-b border-glass-border">
-          <div className="flex items-center justify-between">
+        <div className="p-5 border-b border-glass-border h-[73px] flex items-center">
+          <div className="flex items-center justify-between w-full">
             <h1 className="font-semibold text-txt text-lg font-display">Conversas</h1>
 
             {/* Botão Filtro */}
@@ -739,7 +826,7 @@ export default function Conversas() {
           <>
             {/* Header do Chat */}
             {conversaAtual && (
-              <div className="flex items-center gap-3 px-5 py-3 flex-shrink-0 border-b border-glass-border bg-surface-50/80 backdrop-blur-sm">
+              <div className="flex items-center gap-3 px-5 h-[73px] flex-shrink-0 border-b border-glass-border bg-surface-50/80 backdrop-blur-sm">
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-white text-sm flex-shrink-0 shadow-sm"
                   style={{ background: getAvatarColor(conversaAtual.telefone) }}
@@ -796,13 +883,6 @@ export default function Conversas() {
                   {muted ? <VolumeX size={13} /> : <Volume2 size={13} />}
                   {muted ? 'Silenciado' : 'Som'}
                 </button>
-
-                <button
-                  onClick={() => window.open(`/leads?telefone=${conversaAtual.telefone}`, '_blank')}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-[12px] transition-all duration-200 border bg-surface-100 text-txt-secondary border-glass-border hover:border-accent/30 hover:text-accent"
-                >
-                  Ver lead <ChevronRight size={12} />
-                </button>
               </div>
             )}
 
@@ -842,13 +922,39 @@ export default function Conversas() {
               )}
             </div>
 
-            {/* Rodapé — só leitura */}
-            <div className="px-5 py-3 flex-shrink-0 border-t border-glass-border bg-surface-50/80 backdrop-blur-sm">
-              <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-surface-100 border border-glass-border">
-                <MessageSquare size={14} className="text-txt-dim flex-shrink-0" />
-                <span className="text-txt-dim text-[13px]">
-                  Histórico somente leitura — respostas via assistente automática
-                </span>
+            {/* Campo de envio */}
+            <div className="px-4 py-3 flex-shrink-0 border-t border-[#1a1a1a] bg-[#111111]">
+              {envioErro && (
+                <div className="flex items-center gap-2 mb-2 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-[12px]">
+                  <span>Erro ao enviar mensagem</span>
+                  <button onClick={() => setEnvioErro(null)} className="ml-auto hover:text-red-300"><X size={12} /></button>
+                </div>
+              )}
+              <div className="flex items-end gap-3">
+                <textarea
+                  ref={textareaRef}
+                  value={msgTexto}
+                  onChange={handleTextareaChange}
+                  onKeyDown={handleTextareaKeyDown}
+                  disabled={enviando}
+                  placeholder="Digite uma mensagem..."
+                  rows={1}
+                  className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] text-white rounded-xl px-4 py-3 text-[14px] resize-none focus:outline-none focus:border-accent/40 transition-colors duration-200 placeholder:text-txt-dim disabled:opacity-50"
+                  style={{ minHeight: 44, maxHeight: 120 }}
+                />
+                <button
+                  onClick={handleEnviarMensagem}
+                  disabled={!msgTexto.trim() || enviando}
+                  className={`
+                    flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200
+                    ${msgTexto.trim() && !enviando
+                      ? 'bg-accent text-white hover:bg-accent/90 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                      : 'bg-surface-200 text-txt-dim cursor-not-allowed'
+                    }
+                  `}
+                >
+                  {enviando ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} style={{ marginLeft: 1 }} />}
+                </button>
               </div>
             </div>
           </>

@@ -13,6 +13,8 @@ import { Templates } from './pages/Templates';
 import { Mensagens } from './pages/Mensagens';
 import { Numeros } from './pages/Numeros';
 import Conversas from './pages/Conversas';
+import { SimuladorEnvios } from './pages/SimuladorEnvios';
+import { Torneios } from './pages/Torneios';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { useAuthStore } from './stores/authStore';
 
@@ -26,8 +28,8 @@ const ProtectedLayout = () => {
         collapsed={isSidebarCollapsed}
         onToggle={() => setIsSidebarCollapsed((prev) => !prev)}
       />
-      <main className={`flex-1 overflow-y-auto h-screen min-w-0 ${isConversas ? 'p-0' : 'p-6 lg:p-8'}`}>
-        <div className={isConversas ? 'h-full' : 'max-w-[1600px] mx-auto'}>
+      <main className="flex-1 overflow-y-auto h-screen min-w-0">
+        <div className={isConversas ? 'h-full' : 'h-full p-6 lg:p-8'}>
           <Outlet />
         </div>
       </main>
@@ -58,8 +60,10 @@ function App() {
           <Route path="/funil" element={<Funil />} />
           <Route path="/conversas" element={<Conversas />} />
           <Route path="/envios" element={<Envios />} />
+          <Route path="/envios/simulador" element={<SimuladorEnvios />} />
           <Route path="/envios/historico" element={<HistoricoEnvios />} />
           <Route path="/envios/templates" element={<Templates />} />
+          <Route path="/torneios" element={<Torneios />} />
           <Route path="/mensagens" element={<Mensagens />} />
           <Route path="/numeros" element={<Numeros />} />
           <Route path="/notificacoes" element={<Notificacoes />} />

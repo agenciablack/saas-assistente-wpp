@@ -147,7 +147,7 @@ export const Funil: React.FC = () => {
     return (
       <div className="h-[calc(100vh-2rem)] flex flex-col mesh-bg">
         <div className="noise-overlay" />
-        <PageHeader title="Funil de Conversao" />
+        <PageHeader title="Monitoramento de Funil" />
         <div className="flex items-center justify-center flex-1">
           <Loader2 className="w-6 h-6 animate-spin text-accent" />
         </div>
@@ -160,7 +160,7 @@ export const Funil: React.FC = () => {
       <div className="noise-overlay" />
 
       <PageHeader
-        title="Funil de Conversao"
+        title="Monitoramento de Funil"
         onRefresh={refresh}
         isRefreshing={loading}
         rightContent={
