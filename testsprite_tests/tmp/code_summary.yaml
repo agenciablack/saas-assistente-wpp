@@ -1,0 +1,278 @@
+version: "2"
+type: frontend
+tech_stack:
+  - TypeScript
+  - React 19
+  - Vite 6
+  - Tailwind CSS 3
+  - Supabase (auth + database + realtime)
+  - React Router DOM 7
+  - Recharts 3
+  - Axios
+  - date-fns
+  - Lucide React (icons)
+routes:
+  - path: /login
+    file: src/pages/Login.tsx
+    auth_required: false
+    description: User login page with email and password authentication via Supabase
+  - path: /
+    file: src/App.tsx
+    auth_required: true
+    description: Redirects to /dashboard
+  - path: /dashboard
+    file: src/pages/Dashboard.tsx
+    auth_required: true
+    description: Main dashboard with KPIs, conversion chart, and recent leads list
+  - path: /leads
+    file: src/pages/Leads.tsx
+    auth_required: true
+    description: Leads management with two tabs - Automatic Assistant and Premium Assistant
+  - path: /funil
+    file: src/pages/Funil.tsx
+    auth_required: true
+    description: Sales funnel visualization with Kanban-style columns by lead status
+  - path: /envios
+    file: src/pages/Envios.tsx
+    auth_required: true
+    description: Mass messaging page (currently under development/placeholder)
+  - path: /envios/historico
+    file: src/pages/HistoricoEnvios.tsx
+    auth_required: true
+    description: History of mass message sends with filtering and detail view
+  - path: /envios/templates
+    file: src/pages/Templates.tsx
+    auth_required: true
+    description: Message templates CRUD for mass messaging
+  - path: /mensagens
+    file: src/pages/Mensagens.tsx
+    auth_required: true
+    description: Funnel message configuration with tabs for funnel steps and follow-ups
+  - path: /numeros
+    file: src/pages/Numeros.tsx
+    auth_required: true
+    description: WhatsApp number rotation management and opening messages
+  - path: /notificacoes
+    file: src/pages/Notificacoes.tsx
+    auth_required: true
+    description: Notifications page showing new leads, interest, conversions, and group exits
+  - path: /configuracoes
+    file: src/pages/Configuracoes.tsx
+    auth_required: true
+    description: User settings including name, notification preferences, and password change
+features:
+  - name: User Authentication
+    description: Login with email and password via Supabase Auth, with protected routes and session persistence
+    files:
+      - src/pages/Login.tsx
+      - src/context/AuthContext.tsx
+      - src/lib/supabase.ts
+      - src/hooks/useAuth.ts
+    entry_route: /login
+    user_interactions:
+      - Fill email input field
+      - Fill password input field
+      - Click "Entrar" button to submit login form
+      - See error message on invalid credentials
+      - Automatic redirect to dashboard on successful login
+    api_calls:
+      - method: POST
+        endpoint: Supabase Auth signInWithPassword
+    auth_required: false
+  - name: Dashboard with KPIs and Chart
+    description: Overview dashboard showing lead metrics, conversion rate chart, and recent leads with configurable date ranges
+    files:
+      - src/pages/Dashboard.tsx
+      - src/hooks/useDashboard.ts
+      - src/components/MetricCard.tsx
+      - src/components/PageHeader.tsx
+    entry_route: /dashboard
+    user_interactions:
+      - View KPI cards (total leads, conversion rate, waiting for response)
+      - Select date range presets (Today, 7 days, 15 days, 30 days)
+      - Pick custom date range using day picker
+      - Hover over chart to see tooltip details
+      - Click refresh button to reload data
+      - Open notifications modal from bell icon
+      - Click "Ver todos" to navigate to leads page
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from leads table with date filters
+    auth_required: true
+  - name: Leads Management
+    description: Table view of all leads with search, filter, pagination. Two tabs for Automatic and Premium assistant leads
+    files:
+      - src/pages/Leads.tsx
+      - src/hooks/useLeads.ts
+      - src/components/LeadBadge.tsx
+    entry_route: /leads
+    user_interactions:
+      - Switch between Automatic and Premium tabs
+      - Search leads by name or phone number
+      - Filter leads by status (dropdown)
+      - Navigate pages with pagination controls
+      - Click WhatsApp icon to open WhatsApp chat
+      - Change premium status via inline dropdown selector
+      - Sort premium leads by time in group
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from leads table with filters and pagination
+      - method: PATCH
+        endpoint: Supabase update leads status_premium
+    auth_required: true
+  - name: Sales Funnel
+    description: Kanban-style funnel visualization showing leads organized by status columns
+    files:
+      - src/pages/Funil.tsx
+      - src/hooks/useFunil.ts
+    entry_route: /funil
+    user_interactions:
+      - View leads organized in status columns
+      - See lead count per column
+      - Click on lead cards to view details
+      - Refresh funnel data
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from leads table grouped by status
+    auth_required: true
+  - name: Mass Messaging (Envios)
+    description: Mass message sending to leads (currently under development, shows placeholder UI)
+    files:
+      - src/pages/Envios.tsx
+      - src/components/envios/EnviosNav.tsx
+    entry_route: /envios
+    user_interactions:
+      - View "under development" placeholder
+      - Navigate to History and Templates via sub-navigation
+    api_calls: []
+    auth_required: true
+  - name: Message History
+    description: View history of past mass message sends with filtering and detail modal
+    files:
+      - src/pages/HistoricoEnvios.tsx
+      - src/hooks/useHistoricoEnvios.ts
+      - src/components/envios/DetalhesEnvioModal.tsx
+      - src/components/envios/EnviosNav.tsx
+    entry_route: /envios/historico
+    user_interactions:
+      - View list of past mass sends
+      - Filter by date range and type
+      - Click to open detail modal with full send information
+      - Refresh history data
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from envios_massa table
+    auth_required: true
+  - name: Message Templates
+    description: CRUD operations for message templates used in mass messaging
+    files:
+      - src/pages/Templates.tsx
+      - src/hooks/useTemplates.ts
+      - src/components/envios/TemplateCard.tsx
+      - src/components/envios/TemplateFormModal.tsx
+      - src/components/envios/ConfirmDeleteModal.tsx
+    entry_route: /envios/templates
+    user_interactions:
+      - View list of existing templates
+      - Click "+" button to create new template
+      - Edit existing template via card action
+      - Delete template with confirmation modal
+      - Fill template name, type, and messages in form modal
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from templates_mensagem table
+      - method: POST
+        endpoint: Supabase insert into templates_mensagem table
+      - method: PATCH
+        endpoint: Supabase update templates_mensagem table
+      - method: DELETE
+        endpoint: Supabase delete from templates_mensagem table
+    auth_required: true
+  - name: Funnel Messages Configuration
+    description: Configure automated messages for each funnel step and follow-ups
+    files:
+      - src/pages/Mensagens.tsx
+      - src/hooks/useMensagensFunil.ts
+      - src/components/mensagens/MensagemCard.tsx
+    entry_route: /mensagens
+    user_interactions:
+      - Switch between "Etapas do Funil" and "Follow-ups" tabs
+      - Edit message content for each funnel section
+      - Save message changes
+      - Configure timing for follow-up messages
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from mensagens_funil table
+      - method: PATCH
+        endpoint: Supabase update mensagens_funil table
+    auth_required: true
+  - name: WhatsApp Number Management
+    description: Manage WhatsApp numbers for rotation and opening messages
+    files:
+      - src/pages/Numeros.tsx
+      - src/hooks/useWhatsappRotacao.ts
+      - src/components/numeros/NumeroCard.tsx
+      - src/components/numeros/NumeroFormModal.tsx
+      - src/components/numeros/ConfirmDeleteNumeroModal.tsx
+      - src/components/numeros/MensagemAberturaCard.tsx
+      - src/components/numeros/MensagemAberturaFormModal.tsx
+    entry_route: /numeros
+    user_interactions:
+      - Switch between "Numeros WhatsApp" and "Mensagens de Abertura" tabs
+      - Add new WhatsApp number
+      - Edit existing number
+      - Delete number with confirmation
+      - Toggle number active/inactive
+      - Add/edit/delete opening messages
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from whatsapp_rotacao table
+      - method: POST
+        endpoint: Supabase insert into whatsapp_rotacao table
+      - method: PATCH
+        endpoint: Supabase update whatsapp_rotacao table
+      - method: DELETE
+        endpoint: Supabase delete from whatsapp_rotacao table
+    auth_required: true
+  - name: Notifications
+    description: Real-time notifications for new leads, interest signals, conversions, and group exits
+    files:
+      - src/pages/Notificacoes.tsx
+      - src/hooks/useNotificacoes.ts
+    entry_route: /notificacoes
+    user_interactions:
+      - View list of notifications
+      - Mark individual notification as read
+      - Mark all notifications as read
+      - See notification type icons and relative timestamps
+    api_calls:
+      - method: GET
+        endpoint: Supabase select from notificacoes table
+      - method: PATCH
+        endpoint: Supabase update notificacoes lida field
+    auth_required: true
+  - name: User Settings
+    description: Configure user profile name, notification preferences, and change password
+    files:
+      - src/pages/Configuracoes.tsx
+      - src/hooks/useConfiguracoes.ts
+    entry_route: /configuracoes
+    user_interactions:
+      - Edit display name
+      - Toggle notification for new leads
+      - Toggle notification for conversions
+      - Enter current password and new password to change
+      - Click save to persist preferences
+    api_calls:
+      - method: PATCH
+        endpoint: Supabase update dashboard_users table
+      - method: POST
+        endpoint: Supabase Auth updateUser for password change
+    auth_required: true
+known_limitations:
+  - issue: Mass messaging (Envios) page is a placeholder with "Em Desenvolvimento" overlay
+    location: src/pages/Envios.tsx
+    impact: Users cannot send mass messages; only history and templates sub-pages are functional
+  - issue: App requires Supabase environment variables (VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY) to run
+    location: src/lib/supabase.ts
+    impact: App will throw error on startup if env vars are not configured

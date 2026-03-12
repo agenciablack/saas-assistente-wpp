@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vite build)",
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(node -e \"\nconst { createClient } = require\\(''@supabase/supabase-js''\\);\nconst supabase = createClient\\(\n  ''https://albdkqpvoyfhziozgwlk.supabase.co'',\n  ''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsYmRrcXB2b3lmaHppb3pnd2xrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MzQwNDgsImV4cCI6MjA4NzMxMDA0OH0.nIz7fh6wLFeRETxW00-f-F9jSQQgMd19e_hARsATG10''\n\\);\n\nasync function main\\(\\) {\n  // Try to query information_schema to list tables\n  const { data, error } = await supabase.rpc\\(''get_tables''\\).catch\\(\\(\\) => \\({ data: null, error: ''rpc not available'' }\\)\\);\n  \n  if \\(error\\) {\n    // Fallback: try querying common table names or use REST API\n    const res = await fetch\\(''https://albdkqpvoyfhziozgwlk.supabase.co/rest/v1/'', {\n      headers: {\n        ''apikey'': ''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsYmRrcXB2b3lmaHppb3pnd2xrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MzQwNDgsImV4cCI6MjA4NzMxMDA0OH0.nIz7fh6wLFeRETxW00-f-F9jSQQgMd19e_hARsATG10'',\n        ''Authorization'': ''Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsYmRrcXB2b3lmaHppb3pnd2xrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MzQwNDgsImV4cCI6MjA4NzMxMDA0OH0.nIz7fh6wLFeRETxW00-f-F9jSQQgMd19e_hARsATG10''\n      }\n    }\\);\n    const openapi = await res.json\\(\\);\n    console.log\\(''=== OpenAPI Response ===''\\);\n    console.log\\(JSON.stringify\\(openapi, null, 2\\)\\);\n  } else {\n    console.log\\(''Tables:'', data\\);\n  }\n}\nmain\\(\\).catch\\(console.error\\);\n\")",
+      "Bash(node test-supabase.mjs:*)",
+      "Bash(npm run build:*)",
+      "Bash(test:*)",
+      "Bash(curl:*)",
+      "Bash(npx vite:*)",
+      "Bash(head:*)",
+      "Bash(wc:*)",
+      "Bash(cp:*)",
+      "Bash(claude mcp:*)",
+      "mcp__TestSprite__testsprite_check_account_info",
+      "mcp__TestSprite__testsprite_bootstrap",
+      "mcp__TestSprite__testsprite_generate_code_summary",
+      "mcp__TestSprite__testsprite_generate_standardized_prd",
+      "mcp__TestSprite__testsprite_generate_frontend_test_plan",
+      "Bash(npm run:*)",
+      "mcp__TestSprite__testsprite_generate_code_and_execute",
+      "Bash(npx:*)",
+      "Bash(node:*)",
+      "Bash(rm:*)",
+      "Bash(git config:*)",
+      "Bash(git credential-manager:*)",
+      "WebFetch(domain:assistente.agenciablack.site)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(ls -la \"/c/Users/pedro/OneDrive/Área de Trabalho/Allan/Dashboard - Leads/src/\" | grep -E \"\\\\.\\(css|scss\\)$\")",
+      "Bash(find \"C:\\\\Users\\\\pedro\\\\OneDrive\\\\Área de Trabalho\\\\Allan\\\\Dashboard - Leads/src\" -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" -o -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.css\" -o -name \"*.scss\" \\\\\\) 2>/dev/null | sort)",
+      "Bash(ls -la \"/c/Users/pedro/OneDrive/Área de Trabalho/Allan/Dashboard - Leads/src/components/\" | grep -E \"\\\\.tsx$\" | head -15)",
+      "Bash(git ls-remote:*)"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5175",
+  "loginUser": "pedrojuliooberlaender@gmail.com",
+  "loginPassword": "Pedro30102002!",
+  "executionArgs": {
+    "projectName": "Dashboard - Leads",
+    "projectPath": "C:\\Users\\pedro\\OneDrive\\Área de Trabalho\\Allan\\Dashboard - Leads",
+    "testIds": [],
+    "additionalInstruction": "",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-7-zaggaaqvOdI25CnLOKi6xHOJgpNqpu3hlgnHes043Q5vt0k-KDqbHb0JY3DY68suq9xszYIr9uOwC8aiW2BPWheHl6nT9LLjDqmtpzIfmFB-0PilRO-XMyEY6imHvGcBU"
+    }
+  },
+  "serverPort": 61434,
+  "proxy": "http://c9a5f2ed-73e2-43c0-b5a5-a21421328a15:OT8Y21qBv5iZEFz32az6TiKB2J01vU7G@tun.testsprite.com:8080"
+}

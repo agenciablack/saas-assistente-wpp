@@ -1,0 +1,35 @@
+import React from 'react';
+import { StatusLead } from '../types';
+import { getStatusLabel } from '../utils/formatters';
+import { cn } from '../utils/cn';
+
+interface LeadBadgeProps {
+  status: StatusLead;
+  className?: string;
+}
+
+const statusColors: Record<StatusLead, string> = {
+  primeiro_audio_enviado: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  convite_enviado: "bg-sky-500/10 text-sky-400 border-sky-500/20",
+  interessado: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+  aguardando_cadastro: "bg-orange-500/10 text-orange-400 border-orange-500/20",
+  link_enviado: "bg-violet-500/10 text-violet-400 border-violet-500/20",
+  aguardando_confirmacao_entrada: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+  no_grupo: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
+  entrou_grupo: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
+  nao_interessado: "bg-surface-300/30 text-txt-muted border-surface-300/30",
+  sem_resposta: "bg-rose-500/10 text-rose-400 border-rose-500/20",
+  atendimento_manual: "bg-zinc-500/10 text-zinc-400 border-zinc-500/20",
+};
+
+export const LeadBadge: React.FC<LeadBadgeProps> = ({ status, className }) => {
+  return (
+    <span className={cn(
+      "px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium border whitespace-nowrap tracking-wide",
+      statusColors[status],
+      className
+    )}>
+      {getStatusLabel(status)}
+    </span>
+  );
+};

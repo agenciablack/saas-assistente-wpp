@@ -1,0 +1,306 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(63, 63, 70, 0.5) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(63, 63, 70, 0.4);
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(82, 82, 91, 0.6);
+  }
+
+  ::selection {
+    background: rgba(6, 182, 212, 0.25);
+    color: #FAFAFA;
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background-color: #0A0A0B;
+    color: #FAFAFA;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  input, select, textarea {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+@layer components {
+  /* ── Glass Card System ── */
+  .card-glass {
+    @apply relative rounded-2xl overflow-hidden;
+    background: linear-gradient(135deg, rgba(20, 20, 22, 0.8) 0%, rgba(26, 26, 30, 0.6) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .card-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .card-glass:hover {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  /* ── Legacy card-dark mapped to glass ── */
+  .card-dark {
+    @apply relative rounded-2xl overflow-hidden;
+    background: linear-gradient(145deg, rgba(20, 20, 22, 0.9) 0%, rgba(26, 26, 30, 0.7) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      0 4px 16px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.02);
+  }
+
+  .card-dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .card-dark:hover {
+    border-color: rgba(255, 255, 255, 0.07);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      0 8px 24px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .card-dark-elevated {
+    @apply relative rounded-2xl overflow-hidden;
+    background: linear-gradient(145deg, rgba(26, 26, 30, 0.95) 0%, rgba(20, 20, 22, 0.9) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.3),
+      0 8px 32px rgba(0, 0, 0, 0.3),
+      0 24px 64px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .card-dark-elevated::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  /* ── Accent Glow Effects ── */
+  .glow-accent {
+    box-shadow:
+      0 0 30px rgba(6, 182, 212, 0.06),
+      0 0 60px rgba(6, 182, 212, 0.03);
+  }
+
+  .glow-accent-strong {
+    box-shadow:
+      0 0 20px rgba(6, 182, 212, 0.1),
+      0 0 40px rgba(6, 182, 212, 0.06),
+      0 0 80px rgba(6, 182, 212, 0.03);
+  }
+
+  /* ── Text Gradients ── */
+  .text-gradient {
+    background: linear-gradient(135deg, #FAFAFA 0%, #A1A1AA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #06B6D4 0%, #22D3EE 50%, #67E8F9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Border Glow ── */
+  .border-glow {
+    border: 1px solid rgba(6, 182, 212, 0.15);
+    box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.03);
+  }
+
+  .border-glow-active {
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    box-shadow:
+      inset 0 0 20px rgba(6, 182, 212, 0.04),
+      0 0 20px rgba(6, 182, 212, 0.06);
+  }
+
+  /* ── Input System ── */
+  .input-dark {
+    @apply w-full px-4 py-2.5 rounded-xl text-txt placeholder-txt-muted outline-none transition-all duration-300;
+    background: rgba(20, 20, 22, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+  }
+
+  .input-dark:focus {
+    border-color: rgba(6, 182, 212, 0.3);
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.08), 0 0 20px rgba(6, 182, 212, 0.05);
+  }
+
+  /* ── Button Primary ── */
+  .btn-primary {
+    @apply px-6 py-2.5 font-semibold rounded-xl transition-all duration-300 relative overflow-hidden;
+    background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+    color: #0A0A0B;
+    box-shadow: 0 2px 12px rgba(6, 182, 212, 0.2);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3), 0 0 40px rgba(6, 182, 212, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0px);
+  }
+
+  /* ── Noise Overlay ── */
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  /* ── Mesh Gradient Background ── */
+  .mesh-bg {
+    position: relative;
+  }
+
+  .mesh-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 600px 400px at 15% 30%, rgba(6, 182, 212, 0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 500px 350px at 85% 60%, rgba(6, 182, 212, 0.025) 0%, transparent 70%),
+      radial-gradient(ellipse 400px 300px at 50% 90%, rgba(6, 182, 212, 0.02) 0%, transparent 70%);
+    z-index: 0;
+  }
+
+  /* ── Status Dot (breathing animation) ── */
+  .status-dot {
+    @apply relative;
+  }
+
+  .status-dot::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: inherit;
+    animation: breathe 2.5s ease-in-out infinite;
+    opacity: 0.4;
+  }
+
+  /* ── Sparkline Container ── */
+  .sparkline-container {
+    @apply relative overflow-hidden;
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+
+  /* ── Stagger Animations ── */
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+  .stagger-6 { animation-delay: 0.3s; }
+  .stagger-7 { animation-delay: 0.35s; }
+
+  /* ── Gradient Border Utility ── */
+  .gradient-border {
+    position: relative;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, transparent 40%, transparent 60%, rgba(6, 182, 212, 0.1) 100%);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+  }
+
+  /* ── Shimmer Loading ── */
+  .shimmer-line {
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+
+  /* ── Range Slider ── */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #06B6D4;
+    cursor: pointer;
+    border: 2px solid #0A0A0B;
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+    transition: box-shadow 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 16px rgba(6, 182, 212, 0.5);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #06B6D4;
+    cursor: pointer;
+    border: 2px solid #0A0A0B;
+    box-shadow: 0 0 8px rgba(6, 182, 212, 0.3);
+  }
+}

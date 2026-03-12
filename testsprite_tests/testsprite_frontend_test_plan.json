@@ -1,0 +1,3275 @@
+[
+  {
+    "id": "TC001",
+    "title": "Successful login redirects to Dashboard",
+    "description": "Verifies a user can log in with valid credentials and is redirected to the dashboard.",
+    "category": "User Authentication",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Login\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Entrar\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Dashboard\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Invalid password shows error and stays on Login",
+    "description": "Verifies an incorrect password displays an invalid-credentials error and does not navigate away from the login page.",
+    "category": "User Authentication",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"valid.user@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"wrong-password-123\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Entrar\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Credenciais inválidas\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Login with non-existent user shows error and stays on Login",
+    "description": "Verifies logging in with a non-existent email shows an error message and keeps the user on the login page.",
+    "category": "User Authentication",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"does.not.exist.999999@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"some-password-123\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Entrar\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Credenciais inválidas\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Required field validation: empty email prevents login",
+    "description": "Verifies the login form blocks submission and shows a visible validation message when email is missing.",
+    "category": "User Authentication",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Entrar\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Required field validation: empty password prevents login",
+    "description": "Verifies the login form blocks submission and shows a visible validation message when password is missing.",
+    "category": "User Authentication",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Entrar\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Senha\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/login\""
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Session persistence after refresh keeps user on Dashboard",
+    "description": "Verifies the authenticated session persists so a refreshed page remains on the dashboard.",
+    "category": "User Authentication",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Entrar\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Refresh the browser page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Login button disabled/loading prevents duplicate submissions",
+    "description": "Verifies that after clicking Entrar, the UI indicates progress and prevents immediate repeated submissions.",
+    "category": "User Authentication",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Entrar\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Entrar\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Dashboard loads and shows KPI cards plus conversion chart",
+    "description": "Verifies the dashboard renders KPI cards and the conversion chart for the default date range after login.",
+    "category": "Dashboard with KPIs and Chart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Taxa\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"conversion chart\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Refresh dashboard data and confirm KPIs still render after reload",
+    "description": "Verifies the refresh control reloads dashboard data and KPI cards remain visible after the refresh.",
+    "category": "Dashboard with KPIs and Chart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click the refresh button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"KPI cards\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"conversion chart\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Recent leads list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Pick a custom date range and verify chart updates for the selected period",
+    "description": "Verifies selecting a custom date range via the day picker updates the chart area on the dashboard.",
+    "category": "Dashboard with KPIs and Chart",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click to open the custom date range day picker"
+      },
+      {
+        "type": "action",
+        "description": "Select a start date on the day picker"
+      },
+      {
+        "type": "action",
+        "description": "Select an end date on the day picker"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"conversion chart\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "From dashboard, navigate to leads page via \"Ver todos\"",
+    "description": "Verifies the \"Ver todos\" link/button on dashboard navigates to the /leads page.",
+    "category": "Dashboard with KPIs and Chart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" button"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Recent leads\" section"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Ver todos\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/leads\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Leads\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Open notifications from bell icon on dashboard",
+    "description": "Verifies the notifications modal/panel opens from the dashboard header bell icon.",
+    "category": "Dashboard with KPIs and Chart",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click the bell icon in the header"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notifications\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Notificações\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Automatic Assistant: search, paginate, and open WhatsApp chat from a lead row",
+    "description": "Verifies that a user can search leads in the Automatic Assistant tab, navigate pagination, and open a WhatsApp chat from a lead row.",
+    "category": "Leads Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Leads\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Automatic Assistant\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Type \"a\" into the leads search field"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leads table is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the pagination \"Next\" control"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leads table is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the WhatsApp icon on the first visible lead row"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"wa.me\""
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Premium Assistant: sort by time in group",
+    "description": "Verifies that premium leads can be sorted by time in group in the Premium Assistant tab.",
+    "category": "Leads Management",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Leads\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Premium Assistant\" tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leads table is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Time in group\" sort control"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leads table is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Premium Assistant: change premium status via inline dropdown and see it update in the list",
+    "description": "Verifies that changing a lead's premium status using the inline dropdown updates the visible status in the table.",
+    "category": "Leads Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Leads\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Premium Assistant\" tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leads table is visible"
+      },
+      {
+        "type": "action",
+        "description": "Select a different option from the premium status dropdown on the first visible lead row"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Updated\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Automatic Assistant: status filter narrows the table results",
+    "description": "Verifies that selecting a lead status from the filter dropdown updates the table to show filtered results.",
+    "category": "Leads Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Leads\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Automatic Assistant\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Select a status option from the status filter dropdown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the leads table is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Leads: search with no matches shows a \"No leads found\" empty state",
+    "description": "Verifies that an empty state message appears when the search query returns no results.",
+    "category": "Leads Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Leads\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Type \"no-such-lead-000xyz\" into the leads search field"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No leads found\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Open Sales Funnel and verify leads appear in status columns with counts",
+    "description": "Verifies the funnel page renders Kanban-style status columns with visible lead cards and a visible count per column.",
+    "category": "Sales Funnel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Funil\" navigation item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/funil\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Status columns\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Verify each funnel column shows a visible lead count",
+    "description": "Verifies that each visible status column includes a visible numeric count indicator for leads in that column.",
+    "category": "Sales Funnel",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Funil\" navigation item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/funil\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Lead count\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Open a lead card to view lead detail modal",
+    "description": "Verifies clicking a lead card opens a lead detail modal with lead information visible.",
+    "category": "Sales Funnel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Funil\" navigation item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/funil\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible lead card"
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Verify lead detail modal content is visible after opening a lead card",
+    "description": "Verifies the lead detail modal appears and shows key lead detail fields as visible text or sections.",
+    "category": "Sales Funnel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Funil\" navigation item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/funil\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible lead card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Lead detail modal\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Refresh funnel data and verify the funnel remains visible after refresh completes",
+    "description": "Verifies the refresh action completes and the funnel columns remain visible after data reload.",
+    "category": "Sales Funnel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Funil\" navigation item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/funil\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Refresh\" control on the funnel page"
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Refresh funnel data and verify counts are visible after refresh",
+    "description": "Verifies that after triggering refresh, the per-column lead count indicators are still visible.",
+    "category": "Sales Funnel",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Funil\" navigation item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/funil\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Refresh\" control on the funnel page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Lead count\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Envios main page shows 'Em Desenvolvimento' placeholder overlay",
+    "description": "Verifies the Envios landing page displays the under-development placeholder and no active send experience is presented.",
+    "category": "Mass Messaging (Envios)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Envios\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Em Desenvolvimento\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Navigate from Envios to Histórico and see history list",
+    "description": "Verifies the user can reach the History sub-page from Envios and sees the message history screen content.",
+    "category": "Mass Messaging (Envios)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Histórico\" in the Envios sub-navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/envios/historico\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Histórico\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC026",
+    "title": "Navigate from Envios to Templates and see templates list",
+    "description": "Verifies the user can reach the Templates sub-page from Envios and sees the templates list screen content.",
+    "category": "Mass Messaging (Envios)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Templates\" in the Envios sub-navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/envios/templates\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Templates\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC027",
+    "title": "Start template creation from Templates page using '+' action",
+    "description": "Verifies the create-new-template entry point is available and opens a creation UI (form or modal).",
+    "category": "Mass Messaging (Envios)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Templates\" in the Envios sub-navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"+\" (Add) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Novo\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC028",
+    "title": "Envios main page prevents access to sending controls (under development messaging)",
+    "description": "Verifies that attempting to use sending-related actions on Envios shows the under-development state and does not expose a sending workflow.",
+    "category": "Mass Messaging (Envios)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Envios\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Em Desenvolvimento\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Enviar\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC029",
+    "title": "Envios sub-navigation is visible and offers Histórico and Templates links",
+    "description": "Verifies the Envios section provides sub-navigation options to reach functional pages (History and Templates).",
+    "category": "Mass Messaging (Envios)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Envios\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Envios sub-navigation\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Histórico\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Templates\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC030",
+    "title": "Switch between Histórico and Templates via sub-navigation without direct URL navigation",
+    "description": "Verifies in-section navigation works by clicking and updates visible page state accordingly.",
+    "category": "Mass Messaging (Envios)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Histórico\" in the Envios sub-navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/envios/historico\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Templates\" in the Envios sub-navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/envios/templates\""
+      }
+    ]
+  },
+  {
+    "id": "TC031",
+    "title": "Filter message history by date range and type and open details",
+    "description": "Verifies the user can filter the history list and view full send information in the detail modal.",
+    "category": "Message History",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Histórico\" in the Envios navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/envios/historico"
+      },
+      {
+        "type": "action",
+        "description": "Select a date range in the date range filter"
+      },
+      {
+        "type": "action",
+        "description": "Select an option in the \"Type\" filter dropdown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"History list\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first item in the history list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Send details modal\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Detalhes\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC032",
+    "title": "Refresh history list from the history page",
+    "description": "Verifies the refresh action reloads the history list and remains on the history page.",
+    "category": "Message History",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Histórico\" in the Envios navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/envios/historico"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"History list\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Refresh\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"History list\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Loading\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC033",
+    "title": "Open an item and view full information in the details modal",
+    "description": "Verifies that selecting a history item opens a modal with complete send information.",
+    "category": "Message History",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Histórico\" in the Envios navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"History list\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first item in the history list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Send details modal\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Status\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Data\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Tipo\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC034",
+    "title": "Close the details modal and return to the history list",
+    "description": "Verifies the details modal can be dismissed and the user remains on the history page.",
+    "category": "Message History",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Histórico\" in the Envios navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first item in the history list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Send details modal\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Close\" button in the modal"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Send details modal\" is not visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"History list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC035",
+    "title": "Filtering to a range/type with no results shows an empty state",
+    "description": "Verifies the UI handles no matching history results after applying filters.",
+    "category": "Message History",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Histórico\" in the Envios navigation"
+      },
+      {
+        "type": "action",
+        "description": "Select a date range far in the past in the date range filter"
+      },
+      {
+        "type": "action",
+        "description": "Select an option in the \"Type\" filter dropdown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Nenhum\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC036",
+    "title": "Refresh while filters are applied keeps user in context and shows list",
+    "description": "Verifies refreshing history after applying filters keeps the user on the history page and shows results or an empty state.",
+    "category": "Message History",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Envios\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Histórico\" in the Envios navigation"
+      },
+      {
+        "type": "action",
+        "description": "Select a date range in the date range filter"
+      },
+      {
+        "type": "action",
+        "description": "Select an option in the \"Type\" filter dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Refresh\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/envios/historico"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"History list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC037",
+    "title": "Create a new message template and verify it appears in the list",
+    "description": "Validates that a user can create a template via the modal form and then see it listed on the Templates page.",
+    "category": "Message Templates",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Templates\" option in the \"Envios\" (Sends) section of the navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"+\" button to create a new template"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Novo Template\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Template E2E - Promo 01\" into the template name field"
+      },
+      {
+        "type": "action",
+        "description": "Select \"Promoção\" from the template type dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Olá! Esta é uma mensagem de teste.\" into the first message field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Template E2E - Promo 01\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC038",
+    "title": "Cancel template creation and verify nothing is added",
+    "description": "Ensures closing the create modal without saving does not add a new template to the list.",
+    "category": "Message Templates",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Templates\" option in the \"Envios\" (Sends) section of the navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"+\" button to create a new template"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Novo Template\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Template E2E - Cancel\" into the template name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Cancelar\" (Cancel) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Novo Template\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC039",
+    "title": "Attempt to create a template with invalid data and verify validation blocks saving",
+    "description": "Validates client-side validation errors are shown and the template is not created when required fields are invalid.",
+    "category": "Message Templates",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Templates\" option in the \"Envios\" (Sends) section of the navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"+\" button to create a new template"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Novo Template\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Campo obrigatório\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC040",
+    "title": "Verify Templates page loads and shows an empty-state or list state",
+    "description": "Confirms the Templates page loads successfully and displays either existing template cards or an empty-state message.",
+    "category": "Message Templates",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Templates\" option in the \"Envios\" (Sends) section of the navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Templates\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"templates list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC041",
+    "title": "Save updated message content in Etapas do Funil tab",
+    "description": "Verifies a user can edit a funnel step message and save it successfully in the Etapas do Funil tab.",
+    "category": "Funnel Messages Configuration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mensagens\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Etapas do Funil\" tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Etapas do Funil\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Mensagem de teste atualizada\" into a funnel step message content field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Salvo\" or \"Salvo com sucesso\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC042",
+    "title": "Switch between Etapas do Funil and Follow-ups tabs",
+    "description": "Verifies the user can switch tabs and see the correct tab content rendered.",
+    "category": "Funnel Messages Configuration",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mensagens\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Follow-ups\" tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Follow-ups\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Etapas do Funil\" tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Etapas do Funil\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC043",
+    "title": "Save follow-up timing configuration successfully",
+    "description": "Verifies a user can configure timing for a follow-up and save the configuration.",
+    "category": "Funnel Messages Configuration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mensagens\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Follow-ups\" tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Follow-ups\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Select \"1\" from the follow-up timing value dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Select \"Dia(s)\" (Days) from the follow-up timing unit dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Salvo\" or \"Salvo com sucesso\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC044",
+    "title": "Edit follow-up message content and save",
+    "description": "Verifies the user can edit follow-up message content (not only timing) and save changes.",
+    "category": "Funnel Messages Configuration",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mensagens\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Follow-ups\" tab"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Follow-ups\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Follow-up: mensagem de teste\" into a follow-up message content field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Salvo\" or \"Salvo com sucesso\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC045",
+    "title": "Validate required message content prevents saving empty message",
+    "description": "Verifies the UI prevents saving when message content is empty and shows a validation message.",
+    "category": "Funnel Messages Configuration",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mensagens\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Etapas do Funil\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Type \"\" into a funnel step message content field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Campo obrigatório\" or \"Mensagem é obrigatória\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC046",
+    "title": "Large message content can be saved successfully",
+    "description": "Verifies the user can save a long message without UI truncation errors and sees a success confirmation.",
+    "category": "Funnel Messages Configuration",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mensagens\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Etapas do Funil\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Mensagem longa de teste: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\" into a funnel step message content field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Salvo\" or \"Salvo com sucesso\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC047",
+    "title": "Follow-up timing unit change persists after save",
+    "description": "Verifies changing the follow-up timing unit and saving shows the selected unit on the page after save confirmation.",
+    "category": "Funnel Messages Configuration",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mensagens\" in the main navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Follow-ups\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Select \"2\" from the follow-up timing value dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Select \"Hora(s)\" (Hours) from the follow-up timing unit dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Salvo\" or \"Salvo com sucesso\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Hora(s)\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC048",
+    "title": "Add a new WhatsApp number and verify it appears in the list",
+    "description": "Verifies a user can add a new WhatsApp number via the modal and see it listed.",
+    "category": "WhatsApp Number Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Números WhatsApp\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Adicionar\" button to add a new number"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Adicionar Número\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Numero Teste 01\" into the name/label field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"+5511999999999\" into the WhatsApp number/phone field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Salvar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Numero Teste 01\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC049",
+    "title": "Toggle a WhatsApp number active/inactive and verify status changes",
+    "description": "Verifies toggling a number updates its visible active/inactive status in the list.",
+    "category": "WhatsApp Number Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Números WhatsApp\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click the active/inactive toggle for the first number in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the first number card shows a visible status change (e.g., \"Ativo\" or \"Inativo\")"
+      }
+    ]
+  },
+  {
+    "id": "TC050",
+    "title": "Delete a WhatsApp number with confirmation and verify it is removed",
+    "description": "Verifies the delete confirmation modal works and the number disappears from the list after confirming.",
+    "category": "WhatsApp Number Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Números WhatsApp\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Excluir\" (delete) button for the first number in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Confirmar exclusão\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Confirmar\" button in the confirmation modal"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Confirmar exclusão\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC051",
+    "title": "Cancel deletion from confirmation modal and verify number remains",
+    "description": "Verifies canceling the delete confirmation keeps the number in the list.",
+    "category": "WhatsApp Number Management",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Números WhatsApp\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first WhatsApp number card to note its displayed name"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the first WhatsApp number name is visible on the card"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Excluir\" (delete) button for that same number card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Confirmar exclusão\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Cancelar\" button in the confirmation modal"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Confirmar exclusão\" is not visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the previously noted WhatsApp number name is still visible in the list"
+      }
+    ]
+  },
+  {
+    "id": "TC052",
+    "title": "Edit an existing WhatsApp number and verify updated details appear",
+    "description": "Verifies a user can edit a number via the edit modal and see updated values on the card.",
+    "category": "WhatsApp Number Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Números WhatsApp\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Editar\" button for the first number in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Editar Número\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Numero Editado\" into the name/label field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Salvar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Numero Editado\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC053",
+    "title": "Add an opening message and verify it is visible under Mensagens de Abertura",
+    "description": "Verifies a user can add an opening message and see it displayed in the opening messages list.",
+    "category": "WhatsApp Number Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Mensagens de Abertura\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Adicionar\" button to add a new opening message"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Adicionar Mensagem\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Olá! Obrigado pelo contato. Como posso ajudar?\" into the message text field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Salvar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Olá! Obrigado pelo contato. Como posso ajudar?\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC054",
+    "title": "Edit an opening message and verify the updated content is shown",
+    "description": "Verifies a user can edit an existing opening message and see updated text displayed.",
+    "category": "WhatsApp Number Management",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Mensagens de Abertura\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Editar\" button for the first opening message in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Editar Mensagem\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Mensagem atualizada: podemos conversar agora?\" into the message text field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Salvar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Mensagem atualizada: podemos conversar agora?\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC055",
+    "title": "Attempt to add a WhatsApp number with invalid phone format and verify validation error",
+    "description": "Verifies invalid phone format is blocked with a visible validation message and no save occurs.",
+    "category": "WhatsApp Number Management",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Entrar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Números\" in the main navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/numeros\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Números WhatsApp\" tab"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Adicionar\" button to add a new number"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Adicionar Número\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Numero Invalido\" into the name/label field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"123-ABC\" into the WhatsApp number/phone field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Salvar\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"número inválido\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC056",
+    "title": "View notifications list with type icons and relative timestamps",
+    "description": "Verifies the notifications page loads and displays notifications with visible type indicators and relative timestamps.",
+    "category": "Notifications",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Notificações\" in the main navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/notificacoes\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notifications list\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notification item with type icon and relative timestamp\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC057",
+    "title": "Mark a single notification as read by opening it",
+    "description": "Verifies clicking a notification marks it as read and the UI reflects the read state.",
+    "category": "Notifications",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Notificações\" in the main navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Unread notification item\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Unread notification item\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Selected notification marked as read\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC058",
+    "title": "Mark all notifications as read using 'Mark all as read'",
+    "description": "Verifies the 'Mark all as read' control marks every notification as read and clears the unread indicator.",
+    "category": "Notifications",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Notificações\" in the main navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Mark all as read\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mark all as read\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Unread count indicator\" is not visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Any unread notification indicator\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC059",
+    "title": "Notifications page empty state",
+    "description": "Verifies the page shows a clear empty state when there are no notifications to display.",
+    "category": "Notifications",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Notificações\" in the main navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/notificacoes\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Nenhuma notificação\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notifications list\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC060",
+    "title": "Mark all as read is idempotent when everything is already read",
+    "description": "Verifies clicking 'Mark all as read' does not break the UI when there are no unread notifications.",
+    "category": "Notifications",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Notificações\" in the main navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Unread count indicator\" is not visible"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Mark all as read\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/notificacoes\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Unread count indicator\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC061",
+    "title": "Notification type variety is visually distinguishable",
+    "description": "Verifies that different notification types (new lead, interest, conversion, group exit) are visually distinguishable via labels or icons.",
+    "category": "Notifications",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Entrar\" (Login) button"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Notificações\" in the main navigation menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notification item for new lead\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notification item for interest signal\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notification item for conversion\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notification item for group exit\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC062",
+    "title": "Update display name and verify it is reflected on the settings page",
+    "description": "Ensures a user can change their display name, save it, and see the updated name reflected in the UI.",
+    "category": "User Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "action",
+        "description": "Type \"QA User Updated\" into the display name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"QA User Updated\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC063",
+    "title": "Toggle notification preferences (new leads + conversions) and save",
+    "description": "Ensures notification toggles can be changed and saved with visible confirmation of the new state.",
+    "category": "User Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "action",
+        "description": "Click the toggle for \"Notificações de novos leads\" (new leads notifications)"
+      },
+      {
+        "type": "action",
+        "description": "Click the toggle for \"Notificações de conversões\" (conversions notifications)"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Configurações salvas\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC064",
+    "title": "Persist notification preferences after reload of settings page",
+    "description": "Ensures saved notification preferences remain set after leaving and returning to the settings screen.",
+    "category": "User Settings",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "action",
+        "description": "Click the toggle for \"Notificações de novos leads\" (new leads notifications)"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Configurações salvas\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Dashboard\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Notificações de novos leads\" toggle is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC065",
+    "title": "Change password with correct current password and verify success confirmation",
+    "description": "Ensures a user can change their password by providing the current password and a new password and receives a success message.",
+    "category": "User Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the current password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPass!2345\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Senha alterada\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC066",
+    "title": "Attempt password change with incorrect current password and verify error message",
+    "description": "Ensures the app blocks password change when current password is wrong and shows a visible error.",
+    "category": "User Settings",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongCurrentPass!\" into the current password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"NewPass!2345\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Senha atual incorreta\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC067",
+    "title": "Save display name with empty value and verify validation message",
+    "description": "Ensures the settings page prevents saving an empty display name and shows a visible validation error.",
+    "category": "User Settings",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "action",
+        "description": "Type \"\" into the display name field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Nome é obrigatório\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC068",
+    "title": "Attempt password change with new password empty and verify validation message",
+    "description": "Ensures the app prevents changing password when new password is missing and shows a visible validation error.",
+    "category": "User Settings",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the current password field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"\" into the new password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Salvar\" (Save) button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Nova senha é obrigatória\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC069",
+    "title": "Verify settings page shows all main sections (profile, notifications, password)",
+    "description": "Ensures the settings UI renders the expected sections so users can manage profile, notification preferences, and password.",
+    "category": "User Settings",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Configurações\" in the app navigation/menu"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/configuracoes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Perfil\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Notificações\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Senha\" is visible"
+      }
+    ]
+  }
+]
