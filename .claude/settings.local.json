@@ -31,7 +31,9 @@
       "Bash(ls -la \"/c/Users/pedro/OneDrive/Área de Trabalho/Allan/Dashboard - Leads/src/\" | grep -E \"\\\\.\\(css|scss\\)$\")",
       "Bash(find \"C:\\\\Users\\\\pedro\\\\OneDrive\\\\Área de Trabalho\\\\Allan\\\\Dashboard - Leads/src\" -type f \\\\\\( -name \"*.js\" -o -name \"*.jsx\" -o -name \"*.ts\" -o -name \"*.tsx\" -o -name \"*.css\" -o -name \"*.scss\" \\\\\\) 2>/dev/null | sort)",
       "Bash(ls -la \"/c/Users/pedro/OneDrive/Área de Trabalho/Allan/Dashboard - Leads/src/components/\" | grep -E \"\\\\.tsx$\" | head -15)",
-      "Bash(git ls-remote:*)"
+      "Bash(git ls-remote:*)",
+      "Bash(cd \"/c/Users/pedro/OneDrive/Área de Trabalho/Allan/Dashboard - Leads\" && gh api repos/agenciablack/saas-assistente-wpp/pages 2>&1 | head -20)",
+      "Bash(cd \"/c/Users/pedro/OneDrive/Área de Trabalho/Allan/Dashboard - Leads\" && mv github-pages docs)"
     ]
   }
 }

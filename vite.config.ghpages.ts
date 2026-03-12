@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   base: './',
   build: {
-    outDir: 'github-pages',
+    outDir: 'docs',
     emptyOutDir: true,
     sourcemap: false,
     rollupOptions: {
