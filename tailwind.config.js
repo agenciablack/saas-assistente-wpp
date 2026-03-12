@@ -23,9 +23,9 @@ export default {
         },
         txt: {
           DEFAULT: '#FAFAFA',
-          secondary: '#A1A1AA',
-          muted: '#71717A',
-          dim: '#52525B',
+          secondary: '#E8E8EF',
+          muted: '#D0D0DA',
+          dim: '#B8B8C4',
         },
         glass: {
           DEFAULT: 'rgba(255, 255, 255, 0.03)',

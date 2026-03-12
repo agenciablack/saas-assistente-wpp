@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Trophy, BarChart3, Users, Plus, Clock, Zap, Loader2, X, Pencil, Trash2, Pause, Play, XCircle, MoreHorizontal, RefreshCw, Crown, Search, ChevronDown, ChevronUp, AlertTriangle, Send } from 'lucide-react';
+import { Trophy, BarChart3, Users, Plus, Loader2, X, Pencil, Trash2, Pause, Play, XCircle, MoreHorizontal, RefreshCw, Crown, Search, ChevronDown, ChevronUp, AlertTriangle, Send } from 'lucide-react';
 import { PageHeader } from '../components/PageHeader';
 import { Toast } from '../components/Toast';
 import { useToast } from '../hooks/useToast';
@@ -15,6 +15,7 @@ interface Torneio {
   data_fim: string;
   status: 'ativo' | 'encerrado' | 'pausado';
   created_at: string;
+  logica_ganhador?: 'quantidade' | 'lucro' | null;
 }
 
 interface ResumoAtivo {
@@ -42,6 +43,7 @@ interface TorneioOption {
   id: string;
   nome: string;
   status: string;
+  logica_ganhador?: 'quantidade' | 'lucro' | null;
 }
 
 interface GreenEntry {
@@ -150,6 +152,101 @@ function buildRankingMsg(ranking: RankingEntry[], torneioNome: string, dataInici
   return msg;
 }
 
+// ── Custom Card Icons ──────────────────────────────────────────────
+
+const TrophyIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 40 40" fill="none" className={className}>
+    <defs>
+      <linearGradient id="trophy-grad" x1="10" y1="2" x2="30" y2="38" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#6ee7b7" />
+        <stop offset="50%" stopColor="#34d399" />
+        <stop offset="100%" stopColor="#047857" />
+      </linearGradient>
+      <radialGradient id="trophy-glow" cx="20" cy="14" r="14" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#34d399" stopOpacity="0.25" />
+        <stop offset="100%" stopColor="#34d399" stopOpacity="0" />
+      </radialGradient>
+    </defs>
+    <circle cx="20" cy="14" r="14" fill="url(#trophy-glow)" />
+    <path d="M14 7h12v11c0 4-2.7 7-6 7s-6-3-6-7V7z" fill="url(#trophy-grad)" opacity="0.9" />
+    <path d="M15 7h10v4H15z" fill="#fff" opacity="0.15" />
+    <path d="M14 9H9.5c-.5 0-1 .4-1 1v1c0 3 2 5.5 5 5.5h.5" stroke="url(#trophy-grad)" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <path d="M26 9h4.5c.5 0 1 .4 1 1v1c0 3-2 5.5-5 5.5h-.5" stroke="url(#trophy-grad)" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    <rect x="18" y="25" width="4" height="4" rx="0.8" fill="url(#trophy-grad)" opacity="0.7" />
+    <rect x="14.5" y="29" width="11" height="3" rx="1.5" fill="url(#trophy-grad)" />
+    <rect x="14.5" y="29" width="11" height="1.2" rx="0.6" fill="#fff" opacity="0.12" />
+    <circle cx="20" cy="15.5" r="3" fill="none" stroke="#fff" strokeWidth="1.2" opacity="0.25" />
+    <text x="20" y="17.7" textAnchor="middle" fill="#fff" fontSize="4.5" fontWeight="bold" opacity="0.35" fontFamily="sans-serif">1</text>
+  </svg>
+);
+
+const TimerIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 40 40" fill="none" className={className}>
+    <defs>
+      <linearGradient id="timer-grad" x1="8" y1="4" x2="32" y2="36" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#22d3ee" />
+        <stop offset="100%" stopColor="#0891b2" />
+      </linearGradient>
+      <linearGradient id="timer-inner" x1="12" y1="10" x2="28" y2="34" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#fff" stopOpacity="0.12" />
+        <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+      </linearGradient>
+    </defs>
+    <circle cx="20" cy="22" r="14" stroke="url(#timer-grad)" strokeWidth="2.5" opacity="0.3" />
+    <circle cx="20" cy="22" r="14" stroke="url(#timer-grad)" strokeWidth="2.5" strokeDasharray="88" strokeDashoffset="22" strokeLinecap="round">
+      <animateTransform attributeName="transform" type="rotate" from="0 20 22" to="360 20 22" dur="8s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="20" cy="22" r="10" fill="url(#timer-grad)" opacity="0.12" />
+    <circle cx="20" cy="22" r="10" fill="url(#timer-inner)" />
+    <line x1="20" y1="22" x2="20" y2="15" stroke="url(#timer-grad)" strokeWidth="2" strokeLinecap="round" />
+    <line x1="20" y1="22" x2="25" y2="22" stroke="url(#timer-grad)" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+    <circle cx="20" cy="22" r="1.5" fill="url(#timer-grad)" />
+    <rect x="17" y="4" width="6" height="3" rx="1.5" fill="url(#timer-grad)" opacity="0.6" />
+    <line x1="29" y1="10" x2="31" y2="8" stroke="url(#timer-grad)" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+  </svg>
+);
+
+const ParticipantsIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 40 40" fill="none" className={className}>
+    <defs>
+      <linearGradient id="part-grad" x1="4" y1="8" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#fbbf24" />
+        <stop offset="100%" stopColor="#d97706" />
+      </linearGradient>
+    </defs>
+    <circle cx="20" cy="12" r="5.5" fill="url(#part-grad)" />
+    <circle cx="20" cy="12" r="5.5" fill="#fff" opacity="0.15" />
+    <path d="M10 32c0-5.523 4.477-10 10-10s10 4.477 10 10" fill="url(#part-grad)" opacity="0.25" />
+    <path d="M11 32c0-4.97 4.03-9 9-9s9 4.03 9 9" stroke="url(#part-grad)" strokeWidth="2" strokeLinecap="round" fill="none" />
+    <circle cx="31" cy="14" r="3.5" fill="url(#part-grad)" opacity="0.5" />
+    <path d="M34 26c0-3-1.5-5.5-4-6.8" stroke="url(#part-grad)" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" fill="none" />
+    <circle cx="9" cy="14" r="3.5" fill="url(#part-grad)" opacity="0.5" />
+    <path d="M6 26c0-3 1.5-5.5 4-6.8" stroke="url(#part-grad)" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" fill="none" />
+  </svg>
+);
+
+const GreensIcon: React.FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 40 40" fill="none" className={className}>
+    <defs>
+      <linearGradient id="greens-grad" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#4ade80" />
+        <stop offset="100%" stopColor="#16a34a" />
+      </linearGradient>
+      <linearGradient id="greens-bolt" x1="16" y1="6" x2="24" y2="34" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stopColor="#86efac" />
+        <stop offset="100%" stopColor="#16a34a" />
+      </linearGradient>
+    </defs>
+    <circle cx="20" cy="20" r="16" fill="url(#greens-grad)" opacity="0.08" />
+    <circle cx="20" cy="20" r="12" fill="url(#greens-grad)" opacity="0.1" />
+    <circle cx="20" cy="20" r="16" stroke="url(#greens-grad)" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.3">
+      <animateTransform attributeName="transform" type="rotate" from="0 20 20" to="-360 20 20" dur="20s" repeatCount="indefinite" />
+    </circle>
+    <polygon points="22,6 16,22 22,20 18,34 24,18 18,20" fill="url(#greens-bolt)" />
+    <polygon points="22,6 16,22 22,20 18,34 24,18 18,20" fill="#fff" opacity="0.2" />
+  </svg>
+);
+
 // ── Status Badge ───────────────────────────────────────────────────
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
@@ -170,7 +267,7 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
 interface ModalProps {
   torneio?: Torneio | null;
   onClose: () => void;
-  onSave: (data: { nome: string; data_inicio: string; data_fim: string; status: 'ativo' | 'pausado' }) => Promise<void>;
+  onSave: (data: { nome: string; data_inicio: string; data_fim: string; status: 'ativo' | 'pausado'; logica_ganhador: 'quantidade' | 'lucro' }) => Promise<void>;
   saving: boolean;
 }
 
@@ -179,11 +276,12 @@ const TorneioModal: React.FC<ModalProps> = ({ torneio, onClose, onSave, saving }
   const [dataInicio, setDataInicio] = useState(torneio?.data_inicio ? torneio.data_inicio.slice(0, 16) : '');
   const [dataFim, setDataFim] = useState(torneio?.data_fim ? torneio.data_fim.slice(0, 16) : '');
   const [status, setStatus] = useState<'ativo' | 'pausado'>(torneio?.status === 'pausado' ? 'pausado' : 'ativo');
+  const [logica, setLogica] = useState<'quantidade' | 'lucro'>(torneio?.logica_ganhador === 'quantidade' ? 'quantidade' : 'lucro');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!nome.trim() || !dataInicio || !dataFim) return;
-    onSave({ nome: nome.trim(), data_inicio: new Date(dataInicio).toISOString(), data_fim: new Date(dataFim).toISOString(), status });
+    onSave({ nome: nome.trim(), data_inicio: new Date(dataInicio).toISOString(), data_fim: new Date(dataFim).toISOString(), status, logica_ganhador: logica });
   };
 
   return (
@@ -217,6 +315,13 @@ const TorneioModal: React.FC<ModalProps> = ({ torneio, onClose, onSave, saving }
             <select value={status} onChange={e => setStatus(e.target.value as 'ativo' | 'pausado')} className="input-dark w-full">
               <option value="ativo">Ativo</option>
               <option value="pausado">Pausado</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-[10px] font-mono font-semibold text-txt-muted mb-2 uppercase tracking-widest">Lógica de ganhador</label>
+            <select value={logica} onChange={e => setLogica(e.target.value as 'quantidade' | 'lucro')} className="input-dark w-full">
+              <option value="quantidade">Maior quantidade de greens</option>
+              <option value="lucro">Maior lucro (soma dos greens)</option>
             </select>
           </div>
 
@@ -482,7 +587,7 @@ export const Torneios: React.FC = () => {
   const [participantes, setParticipantes] = useState<RankingEntry[]>([]);
   const [partLoading, setPartLoading] = useState(false);
   const [partBusca, setPartBusca] = useState('');
-  const [partSort, setPartSort] = useState<{ col: string; asc: boolean }>({ col: 'soma_pagamentos', asc: false });
+  const [partSort, setPartSort] = useState<{ col: string; asc: boolean }>({ col: 'soma_lucro_liquido', asc: false });
   const [expandedPart, setExpandedPart] = useState<string | null>(null);
   const [expandedGreens, setExpandedGreens] = useState<GreenEntry[]>([]);
   const [expandedLoading, setExpandedLoading] = useState(false);
@@ -562,7 +667,7 @@ export const Torneios: React.FC = () => {
   const fetchRankTorneios = useCallback(async () => {
     const { data } = await supabase
       .from('torneios')
-      .select('id, nome, status')
+      .select('id, nome, status, logica_ganhador')
       .order('created_at', { ascending: false });
     const list = (data as TorneioOption[]) || [];
     setRankTorneios(list);
@@ -579,18 +684,20 @@ export const Torneios: React.FC = () => {
     if (!tid) return;
     setRankLoading(true);
     try {
+      const torneio = rankTorneios.find(t => t.id === tid);
+      const orderColumn = torneio?.logica_ganhador === 'quantidade' ? 'total_greens' : 'soma_lucro_liquido';
       const { data } = await supabase
         .from('ranking_torneio')
         .select('*')
         .eq('torneio_id', tid)
-        .order('soma_pagamentos', { ascending: false });
+        .order(orderColumn, { ascending: false });
       setRanking((data as RankingEntry[]) || []);
     } catch {
       showToast('error', 'Erro ao carregar ranking');
     } finally {
       setRankLoading(false);
     }
-  }, [rankTorneioId, showToast]);
+  }, [rankTorneioId, rankTorneios, showToast]);
 
   // Load ranking torneios when tab changes
   useEffect(() => {
@@ -611,12 +718,20 @@ export const Torneios: React.FC = () => {
     return () => { if (autoRefreshRef.current) clearInterval(autoRefreshRef.current); };
   }, [autoRefresh, activeTab, rankTorneioId, fetchRanking]);
 
+  useEffect(() => {
+    if (!partTorneioId) return;
+    const torneio = partTorneios.find(t => t.id === partTorneioId);
+    if (!torneio) return;
+    const col = torneio.logica_ganhador === 'quantidade' ? 'total_greens' : 'soma_lucro_liquido';
+    setPartSort(prev => (prev.col === col ? prev : { col, asc: false }));
+  }, [partTorneioId, partTorneios]);
+
   // ── Participantes fetch ──────────────────────────────────────
 
   const fetchPartTorneios = useCallback(async () => {
     const { data } = await supabase
       .from('torneios')
-      .select('id, nome, status')
+      .select('id, nome, status, logica_ganhador')
       .order('created_at', { ascending: false });
     const list = (data as TorneioOption[]) || [];
     setPartTorneios(list);
@@ -632,18 +747,20 @@ export const Torneios: React.FC = () => {
     if (!tid) return;
     setPartLoading(true);
     try {
+      const torneio = partTorneios.find(t => t.id === tid);
+      const orderColumn = torneio?.logica_ganhador === 'quantidade' ? 'total_greens' : 'soma_lucro_liquido';
       const { data } = await supabase
         .from('ranking_torneio')
         .select('*')
         .eq('torneio_id', tid)
-        .order('soma_pagamentos', { ascending: false });
+        .order(orderColumn, { ascending: false });
       setParticipantes((data as RankingEntry[]) || []);
     } catch {
       showToast('error', 'Erro ao carregar participantes');
     } finally {
       setPartLoading(false);
     }
-  }, [partTorneioId, showToast]);
+  }, [partTorneioId, partTorneios, showToast]);
 
   const fetchGreensParticipante = useCallback(async (participanteId: string) => {
     if (!partTorneioId) return;
@@ -773,7 +890,7 @@ export const Torneios: React.FC = () => {
 
   // ── Actions ────────────────────────────────────────────────────
 
-  const handleSave = async (data: { nome: string; data_inicio: string; data_fim: string; status: 'ativo' | 'pausado' }) => {
+  const handleSave = async (data: { nome: string; data_inicio: string; data_fim: string; status: 'ativo' | 'pausado'; logica_ganhador: 'quantidade' | 'lucro' }) => {
     setSaving(true);
     try {
       // Se vai ativar, checar se já existe outro ativo
@@ -869,7 +986,7 @@ export const Torneios: React.FC = () => {
               'flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-medium transition-all duration-200',
               activeTab === tab.key
                 ? 'bg-surface-200/60 text-txt shadow-sm border-glow'
-                : 'text-txt-muted hover:text-txt-secondary hover:bg-surface-200/20'
+                : 'text-[#A8A8B3] hover:text-[#D4D4DB] hover:bg-surface-200/20'
             )}
           >
             <tab.icon className="w-3.5 h-3.5" />
@@ -884,91 +1001,118 @@ export const Torneios: React.FC = () => {
           {/* Cards resumo */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Card 1 — Torneio Ativo */}
-            <div className="card-dark p-5 group transition-all duration-500 relative">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-emerald-500/40 to-transparent" />
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-2.5 rounded-xl ring-1 bg-emerald-500/10 text-emerald-400 ring-emerald-500/20">
-                  <Trophy className="w-[18px] h-[18px]" strokeWidth={1.75} />
+            <div className="card-dark p-5 group transition-all duration-500 relative overflow-hidden hover:scale-[1.01]">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-400/60 via-emerald-500/30 to-transparent" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/[0.04] rounded-full blur-2xl group-hover:bg-emerald-500/[0.08] transition-all duration-700" />
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="relative">
+                    <TrophyIcon className="w-11 h-11" />
+                    <div className="absolute inset-0 bg-emerald-400/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
+                  {resumo.torneio && <StatusBadge status={resumo.torneio.status} />}
                 </div>
-                {resumo.torneio && <StatusBadge status={resumo.torneio.status} />}
-              </div>
-              <p className="text-txt-muted text-[11px] font-semibold uppercase tracking-[0.08em] mb-1">Torneio Ativo</p>
-              <div className="text-lg font-bold text-txt font-display tracking-tight leading-tight">
-                {loading ? (
-                  <div className="h-5 w-32 bg-surface-200/40 rounded animate-pulse" />
-                ) : resumo.torneio ? resumo.torneio.nome : (
-                  <span className="text-txt-dim text-sm font-normal">Nenhum torneio ativo</span>
+                <p className="text-txt-muted text-[10px] font-mono font-semibold uppercase tracking-[0.12em] mb-1.5">Torneio Ativo</p>
+                <div className="text-lg font-bold text-txt font-display tracking-tight leading-tight">
+                  {loading ? (
+                    <div className="h-5 w-32 bg-surface-200/40 rounded animate-pulse" />
+                  ) : resumo.torneio ? resumo.torneio.nome : (
+                    <span className="text-txt-dim text-sm font-normal italic">Nenhum ativo</span>
+                  )}
+                </div>
+                {resumo.torneio && (
+                  <p className="text-[10px] text-txt-dim mt-1.5 font-mono tracking-wide">
+                    {fmtDate(resumo.torneio.data_inicio)} — {fmtDate(resumo.torneio.data_fim)}
+                  </p>
                 )}
               </div>
-              {resumo.torneio && (
-                <p className="text-[11px] text-txt-dim mt-1">
-                  {fmtDate(resumo.torneio.data_inicio)} — {fmtDate(resumo.torneio.data_fim)}
-                </p>
-              )}
             </div>
 
             {/* Card 2 — Tempo Restante */}
-            <div className="card-dark p-5 group transition-all duration-500 relative">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-cyan-500/40 to-transparent" />
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-2.5 rounded-xl ring-1 bg-cyan-500/10 text-cyan-400 ring-cyan-500/20">
-                  <Clock className="w-[18px] h-[18px]" strokeWidth={1.75} />
+            <div className="card-dark p-5 group transition-all duration-500 relative overflow-hidden hover:scale-[1.01]">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400/60 via-cyan-500/30 to-transparent" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/[0.04] rounded-full blur-2xl group-hover:bg-cyan-500/[0.08] transition-all duration-700" />
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="relative">
+                    <TimerIcon className="w-11 h-11" />
+                    <div className="absolute inset-0 bg-cyan-400/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
                 </div>
+                <p className="text-txt-muted text-[10px] font-mono font-semibold uppercase tracking-[0.12em] mb-1.5">Tempo Restante</p>
+                {loading ? (
+                  <div className="h-8 w-40 bg-surface-200/40 rounded animate-pulse" />
+                ) : !resumo.torneio ? (
+                  <span className="text-txt-dim text-sm italic">—</span>
+                ) : countdown ? (
+                  <div className="flex gap-2 mt-1">
+                    {[
+                      { val: countdown.d, label: 'DIA' },
+                      { val: countdown.h, label: 'HOR' },
+                      { val: countdown.m, label: 'MIN' },
+                      { val: countdown.s, label: 'SEG' },
+                    ].map((u, i) => (
+                      <React.Fragment key={u.label}>
+                        <div className="text-center">
+                          <div className="text-xl font-bold text-txt font-display tabular-nums bg-surface-200/30 rounded-lg px-2 py-0.5 border border-surface-300/10">
+                            {String(u.val).padStart(2, '0')}
+                          </div>
+                          <div className="text-[8px] text-txt-muted font-mono font-semibold uppercase tracking-widest mt-1">{u.label}</div>
+                        </div>
+                        {i < 3 && <span className="text-cyan-500/40 font-bold text-lg self-start mt-0.5">:</span>}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-rose-400 text-sm font-semibold">Encerrado</span>
+                )}
               </div>
-              <p className="text-txt-muted text-[11px] font-semibold uppercase tracking-[0.08em] mb-1">Tempo Restante</p>
-              {loading ? (
-                <div className="h-8 w-40 bg-surface-200/40 rounded animate-pulse" />
-              ) : !resumo.torneio ? (
-                <span className="text-txt-dim text-sm">—</span>
-              ) : countdown ? (
-                <div className="flex gap-3 mt-1">
-                  {[
-                    { val: countdown.d, label: 'd' },
-                    { val: countdown.h, label: 'h' },
-                    { val: countdown.m, label: 'm' },
-                    { val: countdown.s, label: 's' },
-                  ].map(u => (
-                    <div key={u.label} className="text-center">
-                      <div className="text-xl font-bold text-txt font-display tabular-nums">{String(u.val).padStart(2, '0')}</div>
-                      <div className="text-[10px] text-txt-muted uppercase">{u.label}</div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <span className="text-rose-400 text-sm font-semibold">Encerrado</span>
-              )}
             </div>
 
             {/* Card 3 — Participantes */}
-            <div className="card-dark p-5 group transition-all duration-500 relative">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-amber-500/40 to-transparent" />
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-2.5 rounded-xl ring-1 bg-amber-500/10 text-amber-400 ring-amber-500/20">
-                  <Users className="w-[18px] h-[18px]" strokeWidth={1.75} />
+            <div className="card-dark p-5 group transition-all duration-500 relative overflow-hidden hover:scale-[1.01]">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-amber-400/60 via-amber-500/30 to-transparent" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/[0.04] rounded-full blur-2xl group-hover:bg-amber-500/[0.08] transition-all duration-700" />
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="relative">
+                    <ParticipantsIcon className="w-11 h-11" />
+                    <div className="absolute inset-0 bg-amber-400/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
                 </div>
+                <p className="text-txt-muted text-[10px] font-mono font-semibold uppercase tracking-[0.12em] mb-1.5">Participantes</p>
+                <div className="flex items-baseline gap-1.5">
+                  <div className="text-[2rem] font-bold text-txt font-display tracking-tight leading-none">
+                    {loading ? <div className="h-8 w-12 bg-surface-200/40 rounded animate-pulse" /> : resumo.totalParticipantes}
+                  </div>
+                  {!loading && <span className="text-[11px] text-txt-dim font-mono">jogadores</span>}
+                </div>
+                <p className="text-[10px] text-txt-dim mt-1.5 font-mono">com greens registrados</p>
               </div>
-              <p className="text-txt-muted text-[11px] font-semibold uppercase tracking-[0.08em] mb-1">Participantes</p>
-              <div className="text-[2rem] font-bold text-txt font-display tracking-tight leading-none">
-                {loading ? <div className="h-8 w-12 bg-surface-200/40 rounded animate-pulse" /> : resumo.totalParticipantes}
-              </div>
-              <p className="text-[11px] text-txt-dim mt-1">com greens registrados</p>
             </div>
 
             {/* Card 4 — Greens Registrados */}
-            <div className="card-dark p-5 group transition-all duration-500 relative">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-rose-500/40 to-transparent" />
-              <div className="flex justify-between items-start mb-4">
-                <div className="p-2.5 rounded-xl ring-1 bg-rose-500/10 text-rose-400 ring-rose-500/20">
-                  <Zap className="w-[18px] h-[18px]" strokeWidth={1.75} />
+            <div className="card-dark p-5 group transition-all duration-500 relative overflow-hidden hover:scale-[1.01]">
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-green-400/60 via-green-500/30 to-transparent" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-green-500/[0.04] rounded-full blur-2xl group-hover:bg-green-500/[0.08] transition-all duration-700" />
+              <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="relative">
+                    <GreensIcon className="w-11 h-11" />
+                    <div className="absolute inset-0 bg-green-400/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
                 </div>
+                <p className="text-txt-muted text-[10px] font-mono font-semibold uppercase tracking-[0.12em] mb-1.5">Greens Registrados</p>
+                <div className="flex items-baseline gap-1.5">
+                  <div className="text-[2rem] font-bold text-txt font-display tracking-tight leading-none">
+                    {loading ? <div className="h-8 w-12 bg-surface-200/40 rounded animate-pulse" /> : resumo.totalGreens}
+                  </div>
+                  {!loading && <span className="text-[11px] text-txt-dim font-mono">greens</span>}
+                </div>
+                <p className="text-[10px] text-txt-dim mt-1.5 font-mono">
+                  {loading ? '' : fmtBRL(resumo.somaPagamentos) + ' em pagamentos'}
+                </p>
               </div>
-              <p className="text-txt-muted text-[11px] font-semibold uppercase tracking-[0.08em] mb-1">Greens Registrados</p>
-              <div className="text-[2rem] font-bold text-txt font-display tracking-tight leading-none">
-                {loading ? <div className="h-8 w-12 bg-surface-200/40 rounded animate-pulse" /> : resumo.totalGreens}
-              </div>
-              <p className="text-[11px] text-txt-dim mt-1">
-                {loading ? '' : fmtBRL(resumo.somaPagamentos) + ' em pagamentos'}
-              </p>
             </div>
           </div>
 
@@ -985,8 +1129,8 @@ export const Torneios: React.FC = () => {
           </div>
 
           {/* Tabela */}
-          <div className="card-dark overflow-hidden relative" ref={dropdownRef}>
-            <div className="overflow-x-auto">
+          <div className="card-dark !overflow-visible relative" ref={dropdownRef}>
+            <div className="overflow-visible">
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-surface-300/20">
@@ -1028,7 +1172,8 @@ export const Torneios: React.FC = () => {
                           </button>
 
                           {openDropdown === t.id && (
-                            <div className="absolute right-5 top-12 z-40 w-44 py-1.5 rounded-xl border border-surface-300/20 bg-surface-50 shadow-xl animate-slide-up">
+                            <div className="absolute right-0 bottom-full mb-2 z-50 w-44 py-1.5 rounded-xl border border-surface-300/20 bg-surface-50 shadow-2xl animate-slide-up">
+                              {/* Editar — sempre visível */}
                               <button
                                 onClick={() => { setOpenDropdown(null); setEditando(t); setModalOpen(true); }}
                                 className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-txt-secondary hover:bg-surface-200/40 hover:text-txt transition-colors"
@@ -1036,38 +1181,34 @@ export const Torneios: React.FC = () => {
                                 <Pencil className="w-3.5 h-3.5" /> Editar
                               </button>
 
+                              {/* Pausar — só se ativo */}
                               {t.status === 'ativo' && (
-                                <>
-                                  <button
-                                    onClick={() => { setOpenDropdown(null); setConfirmAction({ type: 'pausar', torneio: t }); }}
-                                    className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-amber-400 hover:bg-surface-200/40 transition-colors"
-                                  >
-                                    <Pause className="w-3.5 h-3.5" /> Pausar
-                                  </button>
-                                  <button
-                                    onClick={() => { setOpenDropdown(null); setConfirmAction({ type: 'encerrar', torneio: t }); }}
-                                    className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-rose-400 hover:bg-surface-200/40 transition-colors"
-                                  >
-                                    <XCircle className="w-3.5 h-3.5" /> Encerrar
-                                  </button>
-                                </>
+                                <button
+                                  onClick={() => { setOpenDropdown(null); setConfirmAction({ type: 'pausar', torneio: t }); }}
+                                  className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-amber-400 hover:bg-surface-200/40 transition-colors"
+                                >
+                                  <Pause className="w-3.5 h-3.5" /> Pausar
+                                </button>
                               )}
 
+                              {/* Retomar — só se pausado */}
                               {t.status === 'pausado' && (
-                                <>
-                                  <button
-                                    onClick={() => { setOpenDropdown(null); setConfirmAction({ type: 'retomar', torneio: t }); }}
-                                    className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-emerald-400 hover:bg-surface-200/40 transition-colors"
-                                  >
-                                    <Play className="w-3.5 h-3.5" /> Retomar
-                                  </button>
-                                  <button
-                                    onClick={() => { setOpenDropdown(null); setConfirmAction({ type: 'encerrar', torneio: t }); }}
-                                    className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-rose-400 hover:bg-surface-200/40 transition-colors"
-                                  >
-                                    <XCircle className="w-3.5 h-3.5" /> Encerrar
-                                  </button>
-                                </>
+                                <button
+                                  onClick={() => { setOpenDropdown(null); setConfirmAction({ type: 'retomar', torneio: t }); }}
+                                  className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-emerald-400 hover:bg-surface-200/40 transition-colors"
+                                >
+                                  <Play className="w-3.5 h-3.5" /> Retomar
+                                </button>
+                              )}
+
+                              {/* Encerrar — se ativo ou pausado */}
+                              {(t.status === 'ativo' || t.status === 'pausado') && (
+                                <button
+                                  onClick={() => { setOpenDropdown(null); setConfirmAction({ type: 'encerrar', torneio: t }); }}
+                                  className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-rose-400 hover:bg-surface-200/40 transition-colors"
+                                >
+                                  <XCircle className="w-3.5 h-3.5" /> Encerrar
+                                </button>
                               )}
 
                               <div className="h-px bg-surface-300/15 my-1" />
@@ -1144,10 +1285,12 @@ export const Torneios: React.FC = () => {
           {rankLoading && ranking.length === 0 ? (
             <div className="space-y-4">
               {/* Podium skeleton */}
-              <div className="flex justify-center items-end gap-4 py-8">
-                {[140, 180, 140].map((h, i) => (
-                  <div key={i} className="w-48 rounded-2xl bg-surface-200/20 animate-pulse" style={{ height: h }} />
-                ))}
+              <div className="card-dark p-8 relative overflow-hidden">
+                <div className="flex justify-center items-end gap-6 pt-12 pb-4">
+                  {[{ w: 'w-44', h: 'h-36' }, { w: 'w-48', h: 'h-48' }, { w: 'w-40', h: 'h-28' }].map((s, i) => (
+                    <div key={i} className={cn(s.w, s.h, 'rounded-xl bg-surface-200/20 animate-pulse')} />
+                  ))}
+                </div>
               </div>
               {/* Table skeleton */}
               <div className="card-dark overflow-hidden">
@@ -1161,147 +1304,196 @@ export const Torneios: React.FC = () => {
               </div>
             </div>
           ) : ranking.length === 0 ? (
-            <div className="card-dark p-12 flex flex-col items-center justify-center">
-              <Trophy className="w-12 h-12 text-txt-muted/40 mb-4" />
-              <p className="text-sm text-txt-muted">Nenhum participante registrou greens neste torneio ainda</p>
+            <div className="card-dark p-16 flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-surface-200/5 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-20 h-20 rounded-full bg-surface-200/20 flex items-center justify-center mb-5">
+                  <Trophy className="w-10 h-10 text-txt-muted/30" />
+                </div>
+                <p className="text-sm text-txt-muted font-display">Nenhum participante registrou greens neste torneio ainda</p>
+              </div>
             </div>
           ) : (
             <>
-              {/* Pódio */}
+              {/* ── Podio ── */}
               {ranking.length >= 3 ? (
-                <div className="flex justify-center items-end gap-4 py-6">
-                  {/* 2nd place — left */}
-                  <div className="w-52 animate-[fadeScale_0.5s_ease-out_0.1s_both]">
-                    <div className="card-dark p-5 rounded-2xl border border-[#C0C0C0]/30 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#C0C0C0]/5 to-transparent pointer-events-none" />
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#C0C0C0]/60 to-transparent" />
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-2xl">🥈</span>
-                          <span className="text-[11px] font-mono text-[#C0C0C0] font-semibold uppercase tracking-wider">2o Lugar</span>
+                <div className="card-dark relative overflow-hidden">
+                  {/* Background ambient */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-[#FFD700]/[0.03] rounded-full blur-[100px]" />
+                    <div className="absolute top-1/3 left-1/4 w-[200px] h-[200px] bg-[#C0C0C0]/[0.02] rounded-full blur-[80px]" />
+                    <div className="absolute top-1/3 right-1/4 w-[200px] h-[200px] bg-[#CD7F32]/[0.02] rounded-full blur-[80px]" />
+                  </div>
+
+                  {/* Header */}
+                  <div className="relative z-10 text-center pt-8 pb-2">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFD700]/[0.08] border border-[#FFD700]/[0.12]">
+                      <Crown className="w-4 h-4 text-[#FFD700]" />
+                      <span className="text-[11px] font-mono font-bold text-[#FFD700]/80 uppercase tracking-[0.15em]">Top 3 Ranking</span>
+                    </div>
+                  </div>
+
+                  {/* Podium visual */}
+                  <div className="relative z-10 flex justify-center items-end gap-3 sm:gap-5 px-4 pt-4 pb-0">
+                    {/* 2nd place */}
+                    <div className="flex-1 max-w-[200px] animate-[fadeScale_0.5s_ease-out_0.1s_both]">
+                      <div className="text-center mb-3">
+                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#D4D4D8] to-[#A1A1AA] shadow-lg shadow-[#C0C0C0]/10 mb-2">
+                          <span className="text-[15px] font-display font-black text-[#0A0A0B]">2</span>
                         </div>
-                        <p className="text-sm font-semibold text-txt truncate">{displayName(ranking[1])}</p>
-                        <p className="text-[11px] text-txt-dim font-mono truncate">{ranking[1].id_conta || 'Pendente'}</p>
-                        <div className="mt-3 pt-3 border-t border-surface-300/15">
-                          <p className="text-lg font-bold text-[#C0C0C0] font-display">{fmtBRL(ranking[1].soma_pagamentos)}</p>
-                          <p className="text-[11px] text-txt-dim">{ranking[1].total_greens} greens</p>
+                        <p className="text-[13px] font-semibold text-txt truncate px-2">{displayName(ranking[1])}</p>
+                        <p className="text-[10px] text-txt-dim font-mono truncate px-2">{ranking[1].id_conta || 'Pendente'}</p>
+                      </div>
+                      <div className="relative">
+                        <div className="h-28 rounded-t-2xl bg-gradient-to-t from-[#A1A1AA]/20 via-[#C0C0C0]/10 to-[#C0C0C0]/5 border border-b-0 border-[#C0C0C0]/15 flex flex-col items-center justify-center gap-1 px-3">
+                          <span className="text-lg font-bold text-[#D4D4D8] font-display tabular-nums">{fmtBRL(ranking[1].soma_pagamentos)}</span>
+                          <span className="text-[10px] text-txt-dim font-mono">{ranking[1].total_greens} greens</span>
                         </div>
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C0C0C0]/50 to-transparent" />
+                      </div>
+                    </div>
+
+                    {/* 1st place */}
+                    <div className="flex-1 max-w-[220px] animate-[fadeScale_0.5s_ease-out_both]">
+                      <div className="text-center mb-3">
+                        <div className="relative inline-block">
+                          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#FFD700] via-[#F5C842] to-[#DAA520] shadow-xl shadow-[#FFD700]/20">
+                            <Crown className="w-7 h-7 text-[#0A0A0B]" />
+                          </div>
+                          <div className="absolute -inset-1 rounded-full border-2 border-[#FFD700]/20 animate-pulse" />
+                        </div>
+                        <p className="text-[15px] font-bold text-txt truncate px-2 mt-2">{displayName(ranking[0])}</p>
+                        <p className="text-[10px] text-txt-dim font-mono truncate px-2">{ranking[0].id_conta || 'Pendente'}</p>
+                      </div>
+                      <div className="relative">
+                        <div className="h-40 rounded-t-2xl bg-gradient-to-t from-[#DAA520]/20 via-[#FFD700]/10 to-[#FFD700]/5 border border-b-0 border-[#FFD700]/20 flex flex-col items-center justify-center gap-1 px-3">
+                          <span className="text-2xl font-bold text-[#FFD700] font-display tabular-nums">{fmtBRL(ranking[0].soma_pagamentos)}</span>
+                          <span className="text-[10px] text-txt-dim font-mono">{ranking[0].total_greens} greens</span>
+                        </div>
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#FFD700]/60 to-transparent" />
+                        <div className="absolute -top-px left-1/2 -translate-x-1/2 w-12 h-[2px] bg-[#FFD700]/80 blur-sm" />
+                      </div>
+                    </div>
+
+                    {/* 3rd place */}
+                    <div className="flex-1 max-w-[180px] animate-[fadeScale_0.5s_ease-out_0.2s_both]">
+                      <div className="text-center mb-3">
+                        <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-[#CD7F32] to-[#A0522D] shadow-lg shadow-[#CD7F32]/10 mb-2">
+                          <span className="text-[15px] font-display font-black text-[#0A0A0B]">3</span>
+                        </div>
+                        <p className="text-[13px] font-semibold text-txt truncate px-2">{displayName(ranking[2])}</p>
+                        <p className="text-[10px] text-txt-dim font-mono truncate px-2">{ranking[2].id_conta || 'Pendente'}</p>
+                      </div>
+                      <div className="relative">
+                        <div className="h-20 rounded-t-2xl bg-gradient-to-t from-[#A0522D]/20 via-[#CD7F32]/10 to-[#CD7F32]/5 border border-b-0 border-[#CD7F32]/15 flex flex-col items-center justify-center gap-1 px-3">
+                          <span className="text-lg font-bold text-[#CD7F32] font-display tabular-nums">{fmtBRL(ranking[2].soma_pagamentos)}</span>
+                          <span className="text-[10px] text-txt-dim font-mono">{ranking[2].total_greens} greens</span>
+                        </div>
+                        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#CD7F32]/50 to-transparent" />
                       </div>
                     </div>
                   </div>
 
-                  {/* 1st place — center (taller) */}
-                  <div className="w-56 -mt-6 animate-[fadeScale_0.5s_ease-out_both]">
-                    <div className="card-dark p-6 rounded-2xl border border-[#FFD700]/30 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/8 via-[#FFD700]/3 to-transparent pointer-events-none" />
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#FFD700]/70 via-[#FFD700]/40 to-transparent" />
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Crown className="w-6 h-6 text-[#FFD700]" />
-                          <span className="text-[11px] font-mono text-[#FFD700] font-semibold uppercase tracking-wider">1o Lugar</span>
-                        </div>
-                        <p className="text-base font-semibold text-txt truncate">{displayName(ranking[0])}</p>
-                        <p className="text-[11px] text-txt-dim font-mono truncate">{ranking[0].id_conta || 'Pendente'}</p>
-                        <div className="mt-4 pt-4 border-t border-[#FFD700]/15">
-                          <p className="text-2xl font-bold text-[#FFD700] font-display">{fmtBRL(ranking[0].soma_pagamentos)}</p>
-                          <p className="text-[11px] text-txt-dim">{ranking[0].total_greens} greens</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 3rd place — right */}
-                  <div className="w-48 animate-[fadeScale_0.5s_ease-out_0.2s_both]">
-                    <div className="card-dark p-5 rounded-2xl border border-[#CD7F32]/30 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-[#CD7F32]/5 to-transparent pointer-events-none" />
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#CD7F32]/60 to-transparent" />
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="text-2xl">🥉</span>
-                          <span className="text-[11px] font-mono text-[#CD7F32] font-semibold uppercase tracking-wider">3o Lugar</span>
-                        </div>
-                        <p className="text-sm font-semibold text-txt truncate">{displayName(ranking[2])}</p>
-                        <p className="text-[11px] text-txt-dim font-mono truncate">{ranking[2].id_conta || 'Pendente'}</p>
-                        <div className="mt-3 pt-3 border-t border-surface-300/15">
-                          <p className="text-lg font-bold text-[#CD7F32] font-display">{fmtBRL(ranking[2].soma_pagamentos)}</p>
-                          <p className="text-[11px] text-txt-dim">{ranking[2].total_greens} greens</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  {/* Base line */}
+                  <div className="relative z-10 h-[1px] bg-gradient-to-r from-transparent via-surface-300/30 to-transparent" />
                 </div>
               ) : (
-                /* Less than 3: show available cards in a row */
-                <div className="flex justify-center gap-4 py-6">
-                  {ranking.slice(0, 3).map((entry, i) => {
-                    const colors = ['#FFD700', '#C0C0C0', '#CD7F32'];
-                    const medals = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
-                    return (
-                      <div key={entry.participante_id} className="w-52 animate-[fadeScale_0.5s_ease-out_both]">
-                        <div className="card-dark p-5 rounded-2xl relative overflow-hidden" style={{ borderColor: `${colors[i]}30`, borderWidth: 1 }}>
-                          <div className="absolute top-0 left-0 right-0 h-[2px]" style={{ background: `linear-gradient(to right, ${colors[i]}99, transparent)` }} />
-                          <div className="relative z-10">
-                            <div className="flex items-center gap-2 mb-3">
-                              <span className="text-2xl">{medals[i]}</span>
-                              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider" style={{ color: colors[i] }}>{i + 1}o Lugar</span>
-                            </div>
-                            <p className="text-sm font-semibold text-txt truncate">{displayName(entry)}</p>
-                            <p className="text-[11px] text-txt-dim font-mono truncate">{entry.id_conta || 'Pendente'}</p>
-                            <div className="mt-3 pt-3 border-t border-surface-300/15">
-                              <p className="text-lg font-bold font-display" style={{ color: colors[i] }}>{fmtBRL(entry.soma_pagamentos)}</p>
-                              <p className="text-[11px] text-txt-dim">{entry.total_greens} greens</p>
-                            </div>
+                /* Less than 3: show available in podium style */
+                <div className="card-dark relative overflow-hidden p-8">
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-[#FFD700]/[0.03] rounded-full blur-[80px]" />
+                  </div>
+                  <div className="relative z-10 text-center mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFD700]/[0.08] border border-[#FFD700]/[0.12]">
+                      <Crown className="w-4 h-4 text-[#FFD700]" />
+                      <span className="text-[11px] font-mono font-bold text-[#FFD700]/80 uppercase tracking-[0.15em]">Ranking</span>
+                    </div>
+                  </div>
+                  <div className="relative z-10 flex justify-center gap-6">
+                    {ranking.slice(0, 3).map((entry, i) => {
+                      const colors = ['#FFD700', '#C0C0C0', '#CD7F32'];
+                      return (
+                        <div key={entry.participante_id} className="text-center animate-[fadeScale_0.5s_ease-out_both]">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full mb-3 shadow-lg" style={{ background: `linear-gradient(135deg, ${colors[i]}, ${colors[i]}99)`, boxShadow: `0 4px 20px ${colors[i]}20` }}>
+                            {i === 0 ? <Crown className="w-6 h-6 text-[#0A0A0B]" /> : <span className="text-[17px] font-display font-black text-[#0A0A0B]">{i + 1}</span>}
                           </div>
+                          <p className="text-sm font-semibold text-txt truncate max-w-[160px]">{displayName(entry)}</p>
+                          <p className="text-[10px] text-txt-dim font-mono truncate max-w-[160px]">{entry.id_conta || 'Pendente'}</p>
+                          <p className="text-lg font-bold font-display mt-2 tabular-nums" style={{ color: colors[i] }}>{fmtBRL(entry.soma_pagamentos)}</p>
+                          <p className="text-[10px] text-txt-dim font-mono">{entry.total_greens} greens</p>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
               )}
 
-              {/* Tabela completa */}
+              {/* ── Tabela completa ── */}
               <div className="card-dark overflow-hidden">
+                {/* Table header label */}
+                <div className="px-5 py-3 border-b border-surface-300/10 flex items-center justify-between">
+                  <span className="text-[11px] font-mono font-semibold text-txt-muted uppercase tracking-[0.12em]">Ranking Completo</span>
+                  <span className="text-[11px] font-mono text-txt-dim">{ranking.length} participantes</span>
+                </div>
+
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
                     <thead>
                       <tr className="border-b border-surface-300/20">
-                        <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest w-16">#</th>
-                        <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Nome</th>
-                        <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest">ID Conta</th>
-                        <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-center">Greens</th>
-                        <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Total Pagamentos</th>
-                        <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Lucro Liquido</th>
+                        <th className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest w-16">#</th>
+                        <th className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Nome</th>
+                        <th className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest">ID Conta</th>
+                        <th className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-center">Greens</th>
+                        <th className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Total Pagamentos</th>
+                        <th className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Lucro Liquido</th>
                       </tr>
                     </thead>
                     <tbody>
                       {ranking.map((entry, i) => {
                         const pos = i + 1;
-                        const posColors: Record<number, string> = { 1: 'text-[#FFD700]', 2: 'text-[#C0C0C0]', 3: 'text-[#CD7F32]' };
-                        const medals: Record<number, string> = { 1: '\uD83E\uDD47', 2: '\uD83E\uDD48', 3: '\uD83E\uDD49' };
+                        const isTop3 = pos <= 3;
+                        const medalColors: Record<number, string> = { 1: '#FFD700', 2: '#C0C0C0', 3: '#CD7F32' };
+                        const rowHighlight: Record<number, string> = {
+                          1: 'bg-[#FFD700]/[0.03] hover:bg-[#FFD700]/[0.06]',
+                          2: 'bg-[#C0C0C0]/[0.02] hover:bg-[#C0C0C0]/[0.04]',
+                          3: 'bg-[#CD7F32]/[0.02] hover:bg-[#CD7F32]/[0.04]',
+                        };
                         const lucro = entry.soma_lucro_liquido;
                         return (
-                          <tr key={entry.participante_id} className="border-b border-surface-300/10 hover:bg-surface-200/20 transition-colors duration-150 group">
-                            <td className={cn('px-5 py-4 text-sm font-bold font-display', posColors[pos] || 'text-txt-muted')}>
-                              {medals[pos] ? <span className="text-base">{medals[pos]}</span> : pos}
-                            </td>
-                            <td className="px-5 py-4">
-                              <span className="text-sm font-medium text-txt group-hover:text-accent transition-colors">{displayName(entry)}</span>
-                            </td>
-                            <td className="px-5 py-4">
-                              {entry.id_conta ? (
-                                <span className="text-[12px] text-txt-secondary font-mono">{entry.id_conta}</span>
+                          <tr
+                            key={entry.participante_id}
+                            className={cn(
+                              'border-b border-surface-300/10 transition-colors duration-150 group',
+                              rowHighlight[pos] || 'hover:bg-surface-200/20'
+                            )}
+                          >
+                            <td className="px-5 py-3.5">
+                              {isTop3 ? (
+                                <div className="inline-flex items-center justify-center w-7 h-7 rounded-full" style={{ background: `linear-gradient(135deg, ${medalColors[pos]}, ${medalColors[pos]}88)` }}>
+                                  <span className="text-[12px] font-display font-black text-[#0A0A0B]">{pos}</span>
+                                </div>
                               ) : (
-                                <span className="text-[12px] text-amber-400 font-mono">Pendente</span>
+                                <span className="text-[13px] font-display font-bold text-txt-muted tabular-nums pl-1.5">{pos}</span>
                               )}
                             </td>
-                            <td className="px-5 py-4 text-center">
-                              <span className="text-sm font-semibold text-txt tabular-nums">{entry.total_greens}</span>
+                            <td className="px-5 py-3.5">
+                              <span className={cn('text-[13px] font-medium transition-colors', isTop3 ? 'text-txt' : 'text-txt-secondary group-hover:text-txt')}>{displayName(entry)}</span>
                             </td>
-                            <td className="px-5 py-4 text-right">
-                              <span className="text-sm font-semibold text-txt font-mono tabular-nums">{fmtBRL(entry.soma_pagamentos)}</span>
+                            <td className="px-5 py-3.5">
+                              {entry.id_conta ? (
+                                <span className="text-[11px] text-txt-secondary font-mono">{entry.id_conta}</span>
+                              ) : (
+                                <span className="text-[11px] text-amber-400/70 font-mono">Pendente</span>
+                              )}
                             </td>
-                            <td className="px-5 py-4 text-right">
-                              <span className={cn('text-sm font-semibold font-mono tabular-nums', lucro >= 0 ? 'text-emerald-400' : 'text-rose-400')}>
+                            <td className="px-5 py-3.5 text-center">
+                              <span className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-[12px] font-semibold text-emerald-400 tabular-nums">{entry.total_greens}</span>
+                            </td>
+                            <td className="px-5 py-3.5 text-right">
+                              <span className="text-[13px] font-semibold text-txt font-mono tabular-nums">{fmtBRL(entry.soma_pagamentos)}</span>
+                            </td>
+                            <td className="px-5 py-3.5 text-right">
+                              <span className={cn('text-[13px] font-semibold font-mono tabular-nums', lucro >= 0 ? 'text-emerald-400' : 'text-rose-400')}>
                                 {fmtBRL(lucro)}
                               </span>
                             </td>
@@ -1320,7 +1512,7 @@ export const Torneios: React.FC = () => {
       {/* ─── Aba Participantes ──────────────────────────────── */}
       {activeTab === 'participantes' && (
         <>
-          {/* Seletor de torneio */}
+          {/* Toolbar */}
           <div className="flex flex-wrap items-center gap-3">
             <select
               value={partTorneioId}
@@ -1343,84 +1535,159 @@ export const Torneios: React.FC = () => {
             </button>
           </div>
 
-          {/* Cards resumo */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="card-dark p-4 relative">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-cyan-500/40 to-transparent" />
-              <p className="text-txt-muted text-[11px] font-semibold uppercase tracking-[0.08em] mb-1">Total Participantes</p>
-              <p className="text-2xl font-bold text-txt font-display">{partLoading ? <span className="inline-block h-7 w-8 bg-surface-200/40 rounded animate-pulse" /> : partResumo.total}</p>
+          {/* Stats strip */}
+          <div className="card-dark relative overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-0 left-1/4 w-[300px] h-[100px] bg-cyan-500/[0.03] rounded-full blur-[60px]" />
+              <div className="absolute top-0 right-1/4 w-[200px] h-[100px] bg-amber-500/[0.03] rounded-full blur-[60px]" />
             </div>
-            <div className="card-dark p-4 relative">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-emerald-500/40 to-transparent" />
-              <p className="text-txt-muted text-[11px] font-semibold uppercase tracking-[0.08em] mb-1">Com ID Conta</p>
-              <p className="text-2xl font-bold text-emerald-400 font-display">{partLoading ? <span className="inline-block h-7 w-8 bg-surface-200/40 rounded animate-pulse" /> : partResumo.comId}</p>
-            </div>
-            <div className="card-dark p-4 relative">
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-amber-500/40 to-transparent" />
-              <p className="text-txt-muted text-[11px] font-semibold uppercase tracking-[0.08em] mb-1">ID Pendente</p>
-              <p className={cn('text-2xl font-bold font-display', partResumo.semId > 0 ? 'text-amber-400' : 'text-txt')}>
-                {partLoading ? <span className="inline-block h-7 w-8 bg-surface-200/40 rounded animate-pulse" /> : partResumo.semId}
-              </p>
+            <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-surface-300/10">
+              {/* Total */}
+              <div className="p-5 flex items-center gap-4 group">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/15 to-cyan-500/5 border border-cyan-500/10 flex items-center justify-center shrink-0 group-hover:border-cyan-500/20 transition-colors">
+                  <Users className="w-5 h-5 text-cyan-400" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-[0.12em] mb-0.5">Total Participantes</p>
+                  <p className="text-2xl font-bold text-txt font-display tabular-nums">
+                    {partLoading ? <span className="inline-block h-7 w-10 bg-surface-200/40 rounded animate-pulse" /> : partResumo.total}
+                  </p>
+                </div>
+              </div>
+              {/* Com ID */}
+              <div className="p-5 flex items-center gap-4 group">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500/15 to-emerald-500/5 border border-emerald-500/10 flex items-center justify-center shrink-0 group-hover:border-emerald-500/20 transition-colors">
+                  <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5">
+                    <circle cx="10" cy="10" r="8" stroke="#34d399" strokeWidth="1.5" opacity="0.5" />
+                    <path d="M6.5 10.5l2 2 5-5" stroke="#34d399" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-[0.12em] mb-0.5">Com ID Conta</p>
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-2xl font-bold text-emerald-400 font-display tabular-nums">
+                      {partLoading ? <span className="inline-block h-7 w-10 bg-surface-200/40 rounded animate-pulse" /> : partResumo.comId}
+                    </p>
+                    {!partLoading && partResumo.total > 0 && (
+                      <span className="text-[11px] text-txt-dim font-mono">{Math.round((partResumo.comId / partResumo.total) * 100)}%</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* Pendente */}
+              <div className="p-5 flex items-center gap-4 group">
+                <div className={cn(
+                  'w-12 h-12 rounded-2xl border flex items-center justify-center shrink-0 transition-colors',
+                  partResumo.semId > 0
+                    ? 'bg-gradient-to-br from-amber-500/15 to-amber-500/5 border-amber-500/10 group-hover:border-amber-500/20'
+                    : 'bg-gradient-to-br from-surface-200/20 to-surface-200/5 border-surface-300/10'
+                )}>
+                  <AlertTriangle className={cn('w-5 h-5', partResumo.semId > 0 ? 'text-amber-400' : 'text-txt-dim')} strokeWidth={1.75} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-[0.12em] mb-0.5">ID Pendente</p>
+                  <div className="flex items-baseline gap-2">
+                    <p className={cn('text-2xl font-bold font-display tabular-nums', partResumo.semId > 0 ? 'text-amber-400' : 'text-txt')}>
+                      {partLoading ? <span className="inline-block h-7 w-10 bg-surface-200/40 rounded animate-pulse" /> : partResumo.semId}
+                    </p>
+                    {!partLoading && partResumo.semId > 0 && partResumo.total > 0 && (
+                      <span className="text-[11px] text-amber-400/50 font-mono">{Math.round((partResumo.semId / partResumo.total) * 100)}%</span>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Busca */}
-          <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-muted" />
+          {/* Search bar */}
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-muted group-focus-within:text-accent transition-colors" />
             <input
               type="text"
               value={partBusca}
               onChange={e => setPartBusca(e.target.value)}
               placeholder="Buscar por nome, telefone ou ID conta..."
-              className="input-dark w-full pl-10"
+              className="input-dark w-full pl-11 text-[13px]"
             />
+            {partBusca && (
+              <button
+                onClick={() => setPartBusca('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-txt-muted hover:text-txt rounded-md hover:bg-surface-200/40 transition-colors"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
 
-          {/* Tabela */}
+          {/* Table */}
           {partLoading && participantes.length === 0 ? (
             <div className="card-dark overflow-hidden">
-              {Array.from({ length: 5 }).map((_, i) => (
+              <div className="px-5 py-3 border-b border-surface-300/10">
+                <div className="h-3 w-32 bg-surface-200/40 rounded animate-pulse" />
+              </div>
+              {Array.from({ length: 6 }).map((_, i) => (
                 <div key={i} className="flex gap-4 px-5 py-4 border-b border-surface-300/10">
-                  {Array.from({ length: 6 }).map((_, j) => (
+                  <div className="h-8 w-8 rounded-full bg-surface-200/30 animate-pulse shrink-0" />
+                  {Array.from({ length: 5 }).map((_, j) => (
                     <div key={j} className="h-4 flex-1 bg-surface-200/40 rounded animate-pulse" />
                   ))}
                 </div>
               ))}
             </div>
           ) : filteredParticipantes.length === 0 ? (
-            <div className="card-dark p-12 flex flex-col items-center justify-center">
-              <Users className="w-12 h-12 text-txt-muted/40 mb-4" />
-              <p className="text-sm text-txt-muted">
-                {participantes.length === 0 ? 'Nenhum participante neste torneio' : 'Nenhum resultado encontrado'}
-              </p>
+            <div className="card-dark p-16 flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-surface-200/5 to-transparent pointer-events-none" />
+              <div className="relative z-10 flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full bg-surface-200/20 flex items-center justify-center mb-4">
+                  <Users className="w-8 h-8 text-txt-muted/30" />
+                </div>
+                <p className="text-sm text-txt-muted font-display">
+                  {participantes.length === 0 ? 'Nenhum participante neste torneio' : 'Nenhum resultado encontrado'}
+                </p>
+                {partBusca && (
+                  <button onClick={() => setPartBusca('')} className="mt-3 text-[12px] text-accent hover:text-accent/80 font-medium transition-colors">
+                    Limpar busca
+                  </button>
+                )}
+              </div>
             </div>
           ) : (
-            <div className="card-dark overflow-hidden" ref={partDropdownRef}>
-              <div className="overflow-x-auto">
+            <div className="card-dark !overflow-visible relative" ref={partDropdownRef}>
+              {/* Table header */}
+              <div className="px-5 py-3 border-b border-surface-300/10 flex items-center justify-between">
+                <span className="text-[11px] font-mono font-semibold text-txt-muted uppercase tracking-[0.12em]">
+                  {filteredParticipantes.length !== participantes.length
+                    ? `${filteredParticipantes.length} de ${participantes.length} participantes`
+                    : `${participantes.length} participantes`
+                  }
+                </span>
+              </div>
+
+              <div className="overflow-x-auto overflow-y-visible">
                 <table className="w-full text-left">
                   <thead>
                     <tr className="border-b border-surface-300/20">
-                      <th onClick={() => handlePartSort('participante_nome')} className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest cursor-pointer hover:text-txt-secondary transition-colors">
+                      <th onClick={() => handlePartSort('participante_nome')} className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest cursor-pointer hover:text-txt-secondary transition-colors select-none">
                         Nome <SortIcon col="participante_nome" />
                       </th>
-                      <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Telefone</th>
-                      <th onClick={() => handlePartSort('id_conta')} className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest cursor-pointer hover:text-txt-secondary transition-colors">
+                      <th className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Telefone</th>
+                      <th onClick={() => handlePartSort('id_conta')} className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest cursor-pointer hover:text-txt-secondary transition-colors select-none">
                         ID Conta <SortIcon col="id_conta" />
                       </th>
-                      <th onClick={() => handlePartSort('total_greens')} className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-center cursor-pointer hover:text-txt-secondary transition-colors">
+                      <th onClick={() => handlePartSort('total_greens')} className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-center cursor-pointer hover:text-txt-secondary transition-colors select-none">
                         Greens <SortIcon col="total_greens" />
                       </th>
-                      <th onClick={() => handlePartSort('soma_pagamentos')} className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right cursor-pointer hover:text-txt-secondary transition-colors">
-                        Total Pagamentos <SortIcon col="soma_pagamentos" />
+                      <th onClick={() => handlePartSort('soma_pagamentos')} className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right cursor-pointer hover:text-txt-secondary transition-colors select-none">
+                        Total Pag. <SortIcon col="soma_pagamentos" />
                       </th>
-                      <th onClick={() => handlePartSort('ultimo_green')} className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right cursor-pointer hover:text-txt-secondary transition-colors">
-                        Ultima Atividade <SortIcon col="ultimo_green" />
+                      <th onClick={() => handlePartSort('ultimo_green')} className="px-5 py-3 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right cursor-pointer hover:text-txt-secondary transition-colors select-none">
+                        Atividade <SortIcon col="ultimo_green" />
                       </th>
-                      <th className="px-5 py-3.5 text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-widest w-12"></th>
+                      <th className="px-5 py-3 w-12"></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredParticipantes.map(p => {
+                    {filteredParticipantes.map((p, idx) => {
                       const isExpanded = expandedPart === p.participante_id;
                       const pendingId = !p.id_conta || !p.id_conta.trim();
                       return (
@@ -1428,35 +1695,58 @@ export const Torneios: React.FC = () => {
                           <tr
                             onClick={() => handleExpandParticipante(p.participante_id)}
                             className={cn(
-                              'border-b border-surface-300/10 hover:bg-surface-200/20 transition-colors duration-150 group cursor-pointer',
-                              pendingId && 'border-l-2 border-l-amber-500/40',
-                              isExpanded && 'bg-surface-200/10'
+                              'border-b border-surface-300/10 transition-all duration-150 group cursor-pointer',
+                              isExpanded
+                                ? 'bg-accent/[0.04] hover:bg-accent/[0.06]'
+                                : pendingId
+                                  ? 'hover:bg-amber-500/[0.03]'
+                                  : 'hover:bg-surface-200/20'
                             )}
                           >
-                            <td className="px-5 py-4">
-                              <div className="flex items-center gap-2">
-                                <span className="text-sm font-medium text-txt group-hover:text-accent transition-colors">{p.participante_nome || fmtPhone(p.telefone_whatsapp)}</span>
-                                {pendingId && <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />}
+                            <td className="px-5 py-3.5">
+                              <div className="flex items-center gap-3">
+                                {/* Avatar */}
+                                <div className={cn(
+                                  'w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[11px] font-bold font-display border transition-colors',
+                                  pendingId
+                                    ? 'bg-amber-500/10 text-amber-400 border-amber-500/15'
+                                    : 'bg-accent/10 text-accent border-accent/15'
+                                )}>
+                                  {(p.participante_nome || fmtPhone(p.telefone_whatsapp)).charAt(0).toUpperCase()}
+                                </div>
+                                <div className="min-w-0">
+                                  <span className="text-[13px] font-medium text-txt group-hover:text-accent transition-colors block truncate">
+                                    {p.participante_nome || fmtPhone(p.telefone_whatsapp)}
+                                  </span>
+                                  {p.participante_nome && (
+                                    <span className="text-[10px] text-txt-dim font-mono block">{fmtPhone(p.telefone_whatsapp)}</span>
+                                  )}
+                                </div>
                               </div>
                             </td>
-                            <td className="px-5 py-4 text-[12px] text-txt-secondary font-mono">{fmtPhone(p.telefone_whatsapp)}</td>
-                            <td className="px-5 py-4">
+                            <td className="px-5 py-3.5 text-[11px] text-txt-secondary font-mono">{!p.participante_nome ? '' : fmtPhone(p.telefone_whatsapp)}</td>
+                            <td className="px-5 py-3.5">
                               {pendingId ? (
-                                <span className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/20">Pendente</span>
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/15">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                  Pendente
+                                </span>
                               ) : (
-                                <span className="text-[12px] text-txt-secondary font-mono">{p.id_conta}</span>
+                                <span className="text-[11px] text-txt-secondary font-mono">{p.id_conta}</span>
                               )}
                             </td>
-                            <td className="px-5 py-4 text-center">
-                              <span className="text-sm font-semibold text-txt tabular-nums">{p.total_greens}</span>
+                            <td className="px-5 py-3.5 text-center">
+                              <span className="inline-flex items-center justify-center min-w-[28px] px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-[12px] font-semibold text-emerald-400 tabular-nums">
+                                {p.total_greens}
+                              </span>
                             </td>
-                            <td className="px-5 py-4 text-right">
-                              <span className="text-sm font-semibold text-txt font-mono tabular-nums">{fmtBRL(p.soma_pagamentos)}</span>
+                            <td className="px-5 py-3.5 text-right">
+                              <span className="text-[13px] font-semibold text-txt font-mono tabular-nums">{fmtBRL(p.soma_pagamentos)}</span>
                             </td>
-                            <td className="px-5 py-4 text-right">
-                              <span className="text-[12px] text-txt-secondary">{p.ultimo_green ? fmtRelative(p.ultimo_green) : '—'}</span>
+                            <td className="px-5 py-3.5 text-right">
+                              <span className="text-[11px] text-txt-secondary font-mono">{p.ultimo_green ? fmtRelative(p.ultimo_green) : '—'}</span>
                             </td>
-                            <td className="px-5 py-4 text-right relative" onClick={e => e.stopPropagation()}>
+                            <td className="px-5 py-3.5 text-right relative" onClick={e => e.stopPropagation()}>
                               <button
                                 onClick={() => setPartDropdown(partDropdown === p.participante_id ? null : p.participante_id)}
                                 className="p-1.5 text-txt-muted hover:text-txt hover:bg-surface-200/40 rounded-lg transition-colors"
@@ -1464,7 +1754,10 @@ export const Torneios: React.FC = () => {
                                 <MoreHorizontal className="w-4 h-4" />
                               </button>
                               {partDropdown === p.participante_id && (
-                                <div className="absolute right-5 top-12 z-40 w-48 py-1.5 rounded-xl border border-surface-300/20 bg-surface-50 shadow-xl animate-slide-up">
+                                <div className={cn(
+                                  'absolute right-0 z-50 w-48 py-1.5 rounded-xl border border-surface-300/20 bg-surface-50 shadow-2xl animate-slide-up',
+                                  idx >= filteredParticipantes.length - 2 ? 'bottom-full mb-2' : 'top-full mt-1'
+                                )}>
                                   <button
                                     onClick={() => { setPartDropdown(null); handleExpandParticipante(p.participante_id); }}
                                     className="flex items-center gap-2.5 w-full px-4 py-2 text-[13px] text-txt-secondary hover:bg-surface-200/40 hover:text-txt transition-colors"
@@ -1493,26 +1786,39 @@ export const Torneios: React.FC = () => {
                           {isExpanded && (
                             <tr>
                               <td colSpan={7} className="p-0">
-                                <div className="bg-surface-50/50 border-b border-surface-300/10 px-8 py-4 animate-slide-up">
+                                <div className="bg-accent/[0.02] border-b border-surface-300/10 animate-slide-up">
+                                  {/* Expanded header */}
+                                  <div className="px-6 py-3 border-b border-surface-300/8 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-[10px] font-mono font-semibold text-accent/70 uppercase tracking-[0.12em]">
+                                        Historico de Greens
+                                      </span>
+                                      {!expandedLoading && (
+                                        <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold text-txt-dim bg-surface-200/30">
+                                          {expandedGreens.length}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+
                                   {expandedLoading ? (
-                                    <div className="flex items-center gap-2 py-4 justify-center">
+                                    <div className="flex items-center gap-2 py-6 justify-center">
                                       <Loader2 className="w-4 h-4 animate-spin text-accent" />
-                                      <span className="text-[13px] text-txt-muted">Carregando greens...</span>
+                                      <span className="text-[12px] text-txt-muted font-mono">Carregando...</span>
                                     </div>
                                   ) : expandedGreens.length === 0 ? (
-                                    <p className="text-[13px] text-txt-muted text-center py-4">Nenhum green encontrado</p>
+                                    <p className="text-[12px] text-txt-muted text-center py-6 font-mono">Nenhum green encontrado</p>
                                   ) : (
                                     <div className="overflow-x-auto">
                                       <table className="w-full text-left">
                                         <thead>
-                                          <tr className="border-b border-surface-300/15">
-                                            <th className="px-3 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Jogo</th>
-                                            <th className="px-3 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Data/Hora</th>
-                                            <th className="px-3 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Aposta</th>
-                                            <th className="px-3 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Green</th>
-                                            <th className="px-3 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Lucro</th>
-                                            <th className="px-3 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest">ID Aposta</th>
-                                            <th className="px-3 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Imagem</th>
+                                          <tr className="border-b border-surface-300/8">
+                                            <th className="px-6 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Jogo</th>
+                                            <th className="px-4 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest">Data/Hora</th>
+                                            <th className="px-4 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Aposta</th>
+                                            <th className="px-4 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Green</th>
+                                            <th className="px-4 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest text-right">Lucro</th>
+                                            <th className="px-4 py-2 text-[9px] font-mono font-semibold text-txt-muted uppercase tracking-widest">ID Aposta</th>
                                           </tr>
                                         </thead>
                                         <tbody>
@@ -1520,15 +1826,14 @@ export const Torneios: React.FC = () => {
                                             const lucro = Number(g.valor_green) - Number(g.valor_apostado);
                                             return (
                                               <tr key={g.id} className="border-b border-surface-300/5 hover:bg-surface-200/10 transition-colors">
-                                                <td className="px-3 py-2.5 text-[12px] text-txt">{g.jogo}</td>
-                                                <td className="px-3 py-2.5 text-[11px] text-txt-secondary font-mono">{fmtDate(g.data_hora_aposta)}</td>
-                                                <td className="px-3 py-2.5 text-[12px] text-txt-secondary font-mono text-right tabular-nums">{fmtBRL(Number(g.valor_apostado))}</td>
-                                                <td className="px-3 py-2.5 text-[12px] text-emerald-400 font-mono font-semibold text-right tabular-nums">{fmtBRL(Number(g.valor_green))}</td>
-                                                <td className={cn('px-3 py-2.5 text-[12px] font-mono font-semibold text-right tabular-nums', lucro >= 0 ? 'text-emerald-400' : 'text-rose-400')}>
+                                                <td className="px-6 py-2.5 text-[11px] text-txt font-medium">{g.jogo}</td>
+                                                <td className="px-4 py-2.5 text-[10px] text-txt-secondary font-mono">{fmtDate(g.data_hora_aposta)}</td>
+                                                <td className="px-4 py-2.5 text-[11px] text-txt-secondary font-mono text-right tabular-nums">{fmtBRL(Number(g.valor_apostado))}</td>
+                                                <td className="px-4 py-2.5 text-[11px] text-emerald-400 font-mono font-semibold text-right tabular-nums">{fmtBRL(Number(g.valor_green))}</td>
+                                                <td className={cn('px-4 py-2.5 text-[11px] font-mono font-semibold text-right tabular-nums', lucro >= 0 ? 'text-emerald-400' : 'text-rose-400')}>
                                                   {fmtBRL(lucro)}
                                                 </td>
-                                                <td className="px-3 py-2.5 text-[11px] text-txt-dim font-mono truncate max-w-[120px]">{g.id_aposta}</td>
-                                                <td className="px-3 py-2.5 text-[11px] text-txt-dim font-mono truncate max-w-[100px]">{g.imagem_referencia || '—'}</td>
+                                                <td className="px-4 py-2.5 text-[10px] text-txt-dim font-mono truncate max-w-[120px]">{g.id_aposta}</td>
                                               </tr>
                                             );
                                           })}
