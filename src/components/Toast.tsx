@@ -13,11 +13,11 @@ export const Toast: React.FC<ToastProps> = ({ toast, onClose }) => {
     <div className={cn(
       'fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-2xl border animate-slide-up',
       toast.type === 'success'
-        ? 'bg-accent/10 border-accent/20 text-accent'
+        ? 'bg-[#004AFF]/10 border-[#004AFF]/20 text-[#004AFF]'
         : 'bg-rose-500/10 border-rose-500/20 text-rose-400'
     )} style={{
       background: toast.type === 'success'
-        ? 'linear-gradient(145deg, rgba(6, 182, 212, 0.12) 0%, rgba(6, 182, 212, 0.06) 100%)'
+        ? 'linear-gradient(145deg, rgba(0, 74, 255, 0.12) 0%, rgba(0, 74, 255, 0.06) 100%)'
         : 'linear-gradient(145deg, rgba(244, 63, 94, 0.12) 0%, rgba(244, 63, 94, 0.06) 100%)',
       backdropFilter: 'blur(20px)',
     }}>

@@ -78,17 +78,17 @@ const COLUMN_COLORS: Record<StatusLead, {
     icon: "text-violet-400/60",
   },
   aguardando_confirmacao_entrada: {
-    bar: "bg-gradient-to-r from-cyan-400 to-cyan-500",
-    count: "bg-cyan-500/10 text-cyan-400 ring-cyan-500/20",
-    accent: "hover:border-cyan-500/20",
-    dot: "bg-cyan-400",
-    gradient: "from-cyan-500/5 to-transparent",
-    ring: "ring-cyan-500/15",
-    cardHover: "group-hover:bg-cyan-500/[0.03]",
-    icon: "text-cyan-400/60",
+    bar: "bg-gradient-to-r from-blue-500 to-blue-600",
+    count: "bg-blue-600/10 text-blue-400 ring-blue-600/20",
+    accent: "hover:border-blue-600/20",
+    dot: "bg-blue-400",
+    gradient: "from-blue-600/5 to-transparent",
+    ring: "ring-blue-600/15",
+    cardHover: "group-hover:bg-blue-600/[0.03]",
+    icon: "text-blue-400/60",
   },
   no_grupo: {
-    bar: "bg-gradient-to-r from-emerald-400 to-cyan-400",
+    bar: "bg-gradient-to-r from-emerald-400 to-blue-400",
     count: "bg-emerald-500/12 text-emerald-300 ring-emerald-500/25",
     accent: "hover:border-emerald-500/20",
     dot: "bg-emerald-400",
@@ -98,7 +98,7 @@ const COLUMN_COLORS: Record<StatusLead, {
     icon: "text-emerald-400/60",
   },
   entrou_grupo: {
-    bar: "bg-gradient-to-r from-emerald-400 to-cyan-400",
+    bar: "bg-gradient-to-r from-emerald-400 to-blue-400",
     count: "bg-emerald-500/12 text-emerald-300 ring-emerald-500/25",
     accent: "hover:border-emerald-500/20",
     dot: "bg-emerald-400",
@@ -149,7 +149,7 @@ export const Funil: React.FC = () => {
         <div className="noise-overlay" />
         <PageHeader title="Monitoramento de Funil" />
         <div className="flex items-center justify-center flex-1">
-          <Loader2 className="w-6 h-6 animate-spin text-accent" />
+          <Loader2 className="w-6 h-6 animate-spin text-[#004AFF]" />
         </div>
       </div>
     );

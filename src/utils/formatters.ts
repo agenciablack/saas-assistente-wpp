@@ -80,7 +80,7 @@ export const getStatusColor = (status: string): string => {
     interessado: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
     aguardando_cadastro: "bg-orange-500/10 text-orange-400 border-orange-500/20",
     link_enviado: "bg-violet-500/10 text-violet-400 border-violet-500/20",
-    aguardando_confirmacao_entrada: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+    aguardando_confirmacao_entrada: "bg-blue-600/10 text-blue-400 border-blue-600/20",
     no_grupo: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
     entrou_grupo: "bg-emerald-500/15 text-emerald-400 border-emerald-500/25",
     nao_interessado: "bg-surface-300/30 text-txt-muted border-surface-300/30",

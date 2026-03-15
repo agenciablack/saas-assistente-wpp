@@ -59,7 +59,7 @@ export const DetalhesEnvioModal: React.FC<DetalhesEnvioModalProps> = ({ envio, o
                 <div className="flex items-center gap-1.5 mt-0.5">
                   {isAudio
                     ? <Mic className="w-3 h-3 text-violet-400" />
-                    : <MessageSquareText className="w-3 h-3 text-accent" />
+                    : <MessageSquareText className="w-3 h-3 text-[#004AFF]" />
                   }
                   <span className="text-[13px] text-txt font-medium">{isAudio ? 'Áudio' : 'Texto'}</span>
                 </div>
@@ -91,7 +91,7 @@ export const DetalhesEnvioModal: React.FC<DetalhesEnvioModalProps> = ({ envio, o
             <h3 className="text-[12px] font-mono text-txt-muted uppercase tracking-wide">Mensagens</h3>
             <div className="space-y-2">
               <div className="px-3 py-3 bg-surface-50/60 rounded-xl border border-surface-300/10">
-                <span className="text-[11px] text-accent font-mono uppercase tracking-wide block mb-1.5">Com nome</span>
+                <span className="text-[11px] text-[#004AFF] font-mono uppercase tracking-wide block mb-1.5">Com nome</span>
                 <p className="text-[12px] text-txt-secondary leading-relaxed">{envio.mensagem_com_nome}</p>
               </div>
               <div className="px-3 py-3 bg-surface-50/60 rounded-xl border border-surface-300/10">
@@ -106,7 +106,7 @@ export const DetalhesEnvioModal: React.FC<DetalhesEnvioModalProps> = ({ envio, o
             <h3 className="text-[12px] font-mono text-txt-muted uppercase tracking-wide">Resumo</h3>
             <div className="grid grid-cols-3 gap-3">
               <div className="px-3 py-3 bg-surface-50/60 rounded-xl border border-surface-300/10 text-center">
-                <span className="text-[20px] font-bold text-accent font-display block">{envio.total_leads}</span>
+                <span className="text-[20px] font-bold text-[#004AFF] font-display block">{envio.total_leads}</span>
                 <span className="text-[11px] text-txt-muted">Total enviado</span>
               </div>
               <div className="px-3 py-3 bg-surface-50/60 rounded-xl border border-surface-300/10 text-center">
@@ -124,8 +124,8 @@ export const DetalhesEnvioModal: React.FC<DetalhesEnvioModalProps> = ({ envio, o
               <div className="flex items-center gap-4 px-3 py-2.5 bg-surface-50/60 rounded-xl border border-surface-300/10">
                 {envio.leads_enviados != null && (
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-accent" />
-                    <span className="text-[12px] text-accent font-medium">{envio.leads_enviados} enviados</span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#004AFF]" />
+                    <span className="text-[12px] text-[#004AFF] font-medium">{envio.leads_enviados} enviados</span>
                   </div>
                 )}
                 {envio.leads_erro != null && envio.leads_erro > 0 && (
@@ -146,7 +146,7 @@ export const DetalhesEnvioModal: React.FC<DetalhesEnvioModalProps> = ({ envio, o
             {/* Bar chart */}
             <div className="h-2 bg-surface-200/40 rounded-full overflow-hidden flex">
               <div
-                className="h-full bg-accent rounded-l-full"
+                className="h-full bg-[#004AFF] rounded-l-full"
                 style={{ width: `${comNomePct}%` }}
               />
               <div

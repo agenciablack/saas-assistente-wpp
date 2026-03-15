@@ -18,19 +18,19 @@ export const Envios: React.FC = () => {
             <div className="lg:col-span-3 space-y-5">
               <div className="card-dark p-5 space-y-4">
                 <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-accent" />
+                  <Users className="w-4 h-4 text-[#004AFF]" />
                   <h3 className="text-[14px] font-semibold text-txt font-display">Selecionar Leads</h3>
                 </div>
                 <div className="space-y-2.5">
                   {['Aguardando Nome', 'Convite Enviado', 'Interessado', 'Link Enviado', 'Sem Resposta'].map((s) => (
                     <div key={s} className="flex items-center gap-3 px-3 py-2 rounded-xl">
-                      <div className="w-[18px] h-[18px] rounded-md border-2 border-accent/40 bg-accent/10" />
+                      <div className="w-[18px] h-[18px] rounded-md border-2 border-[#004AFF]/40 bg-[#004AFF]/10" />
                       <span className="text-[13px] text-txt-secondary">{s}</span>
                     </div>
                   ))}
                 </div>
-                <div className="px-3 py-2.5 bg-accent/5 rounded-xl border border-accent/10">
-                  <span className="text-[14px] font-semibold text-accent">124</span>
+                <div className="px-3 py-2.5 bg-[#004AFF]/5 rounded-xl border border-[#004AFF]/10">
+                  <span className="text-[14px] font-semibold text-[#004AFF]">124</span>
                   <span className="text-[13px] text-txt-secondary ml-1.5">leads encontrados</span>
                 </div>
               </div>
@@ -38,7 +38,7 @@ export const Envios: React.FC = () => {
               <div className="card-dark p-5 space-y-3">
                 <h3 className="text-[14px] font-semibold text-txt font-display">Tipo de Envio</h3>
                 <div className="flex gap-3">
-                  <div className="flex-1 p-3 rounded-xl border border-accent/30 bg-accent/5 text-center text-sm text-accent">Audio</div>
+                  <div className="flex-1 p-3 rounded-xl border border-[#004AFF]/30 bg-[#004AFF]/5 text-center text-sm text-[#004AFF]">Audio</div>
                   <div className="flex-1 p-3 rounded-xl border border-surface-300/20 text-center text-sm text-txt-muted">Texto</div>
                 </div>
               </div>
@@ -84,7 +84,7 @@ export const Envios: React.FC = () => {
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-surface-50 border border-surface-300/20 mb-4 shadow-lg">
-              <Wrench className="w-6 h-6 text-accent" />
+              <Wrench className="w-6 h-6 text-[#004AFF]" />
             </div>
             <h3 className="text-lg font-bold text-txt font-display mb-1.5">Em Desenvolvimento</h3>
             <p className="text-sm text-txt-muted max-w-xs mx-auto leading-relaxed">

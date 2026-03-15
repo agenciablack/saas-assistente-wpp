@@ -28,18 +28,18 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
       <div className="flex items-start gap-3">
         <div className={cn(
           'w-10 h-10 rounded-xl flex items-center justify-center shrink-0',
-          isAudio ? 'bg-violet-500/10 border border-violet-500/20' : 'bg-accent/10 border border-accent/20'
+          isAudio ? 'bg-violet-500/10 border border-violet-500/20' : 'bg-[#004AFF]/10 border border-[#004AFF]/20'
         )}>
           {isAudio
             ? <Mic className="w-5 h-5 text-violet-400" />
-            : <MessageSquareText className="w-5 h-5 text-accent" />
+            : <MessageSquareText className="w-5 h-5 text-[#004AFF]" />
           }
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-[14px] font-semibold text-txt font-display truncate">{template.nome}</h3>
           <span className={cn(
             'text-[11px] font-mono uppercase tracking-wide',
-            isAudio ? 'text-violet-400' : 'text-accent'
+            isAudio ? 'text-violet-400' : 'text-[#004AFF]'
           )}>
             {isAudio ? 'Áudio' : 'Texto'}
           </span>
@@ -60,7 +60,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
         <div className="flex items-center gap-1.5">
           <button
             onClick={onUsar}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium text-accent bg-accent/10 hover:bg-accent/20 rounded-lg border border-accent/20 transition-all"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium text-[#004AFF] bg-[#004AFF]/10 hover:bg-[#004AFF]/20 rounded-lg border border-[#004AFF]/20 transition-all"
           >
             <Play className="w-3 h-3" />
             Usar

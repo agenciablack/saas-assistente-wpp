@@ -3,7 +3,7 @@ import { PageHeader } from '../components/PageHeader';
 import { LeadBadge } from '../components/LeadBadge';
 import { useLeads, type LeadFiltro } from '../hooks/useLeads';
 import { formatTelefone, formatRelativeTime, formatDate, formatTempoNoGrupo, getStatusPremiumLabel } from '../utils/formatters';
-import { Search, Filter, ChevronLeft, ChevronRight, Loader2, MessageCircle, Bot, Crown, Clock, ArrowUp, ArrowDown } from 'lucide-react';
+import { Search, Filter, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Loader2, MessageCircle, Bot, Crown, Clock, ArrowUp, ArrowDown } from 'lucide-react';
 import type { StatusLead as StatusLeadUI } from '../types';
 import type { StatusPremium } from '../types/database';
 import { supabase } from '../backend/client';
@@ -171,7 +171,7 @@ const PremiumStatusSelect: React.FC<{ lead: LeadRow; onUpdate: () => void }> = (
 
   return (
     <select
-      className="bg-surface-200/30 border border-surface-300/20 rounded-lg text-[11px] text-txt-muted px-2 py-1 cursor-pointer hover:border-accent/30 hover:text-txt transition-all appearance-none"
+      className="bg-surface-200/30 border border-surface-300/20 rounded-lg text-[11px] text-txt-muted px-2 py-1 cursor-pointer hover:border-[#004AFF]/30 hover:text-txt transition-all appearance-none"
       value=""
       onChange={(e) => handleChange(e.target.value as StatusPremium)}
       disabled={updating}
@@ -187,6 +187,120 @@ const PremiumStatusSelect: React.FC<{ lead: LeadRow; onUpdate: () => void }> = (
         <option key={value} value={value}>{label}</option>
       ))}
     </select>
+  );
+};
+
+/** Gera array de números de página com ellipsis */
+function getPageNumbers(current: number, total: number): (number | '...')[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+  const pages: (number | '...')[] = [];
+
+  // Always show first page
+  pages.push(1);
+
+  if (current <= 4) {
+    // Near start: 1 2 3 4 5 ... last
+    for (let i = 2; i <= Math.min(5, total - 1); i++) pages.push(i);
+    if (total > 6) pages.push('...');
+  } else if (current >= total - 3) {
+    // Near end: 1 ... n-4 n-3 n-2 n-1 last
+    pages.push('...');
+    for (let i = Math.max(total - 4, 2); i <= total - 1; i++) pages.push(i);
+  } else {
+    // Middle: 1 ... c-1 c c+1 ... last
+    pages.push('...');
+    pages.push(current - 1);
+    pages.push(current);
+    pages.push(current + 1);
+    pages.push('...');
+  }
+
+  // Always show last page
+  pages.push(total);
+
+  return pages;
+}
+
+/** Componente de paginação reutilizável */
+const Pagination: React.FC<{
+  current: number;
+  total: number;
+  totalPages: number;
+  itemsPerPage: number;
+  onChange: (page: number) => void;
+}> = ({ current, total, totalPages, itemsPerPage, onChange }) => {
+  const pages = getPageNumbers(current, totalPages);
+
+  return (
+    <div className="px-5 py-4 border-t border-surface-300/20 flex items-center justify-between">
+      <span className="text-[11px] text-txt-muted font-mono">
+        {total === 0
+          ? '0 de 0'
+          : `${(current - 1) * itemsPerPage + 1}-${Math.min(current * itemsPerPage, total)} de ${total}`
+        }
+      </span>
+      <div className="flex items-center gap-1">
+        {/* First page */}
+        <button
+          onClick={() => onChange(1)}
+          disabled={current === 1}
+          className="p-1.5 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
+          title="Primeira página"
+        >
+          <ChevronsLeft className="w-3.5 h-3.5" />
+        </button>
+        {/* Previous */}
+        <button
+          onClick={() => onChange(Math.max(1, current - 1))}
+          disabled={current === 1}
+          className="p-1.5 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
+          title="Página anterior"
+        >
+          <ChevronLeft className="w-3.5 h-3.5" />
+        </button>
+
+        {/* Page numbers */}
+        {pages.map((p, idx) =>
+          p === '...' ? (
+            <span key={`dots-${idx}`} className="px-1.5 text-[11px] text-txt-dim font-mono select-none">
+              ...
+            </span>
+          ) : (
+            <button
+              key={p}
+              onClick={() => onChange(p)}
+              className={`min-w-[32px] h-[32px] flex items-center justify-center rounded-lg text-[11px] font-mono font-medium transition-all duration-150 ${
+                p === current
+                  ? 'bg-[#004AFF]/15 text-[#004AFF] border border-[#004AFF]/30'
+                  : 'border border-surface-300/30 text-txt-muted hover:bg-surface-200/40 hover:border-surface-300/50 hover:text-txt'
+              }`}
+            >
+              {p}
+            </button>
+          )
+        )}
+
+        {/* Next */}
+        <button
+          onClick={() => onChange(Math.min(totalPages, current + 1))}
+          disabled={current === totalPages}
+          className="p-1.5 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
+          title="Próxima página"
+        >
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+        {/* Last page */}
+        <button
+          onClick={() => onChange(totalPages)}
+          disabled={current === totalPages}
+          className="p-1.5 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
+          title="Última página"
+        >
+          <ChevronsRight className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    </div>
   );
 };
 
@@ -261,7 +375,7 @@ export const Leads: React.FC = () => {
           onClick={() => setActiveTab('automatico')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-200 ${
             activeTab === 'automatico'
-              ? 'bg-accent/10 text-accent shadow-sm border border-accent/20'
+              ? 'bg-[#004AFF]/10 text-[#004AFF] shadow-sm border border-[#004AFF]/20'
               : 'text-txt-muted hover:text-txt hover:bg-surface-200/40'
           }`}
         >
@@ -323,7 +437,7 @@ export const Leads: React.FC = () => {
           <div className="card-dark overflow-hidden relative">
             {loading && leads.length > 0 && (
               <div className="absolute inset-0 bg-surface/50 z-10 flex items-center justify-center">
-                <Loader2 className="w-5 h-5 animate-spin text-accent" />
+                <Loader2 className="w-5 h-5 animate-spin text-[#004AFF]" />
               </div>
             )}
 
@@ -381,7 +495,7 @@ export const Leads: React.FC = () => {
                         </td>
                         <td className="px-5 py-4 whitespace-nowrap">
                           <div className="flex flex-col">
-                            <span className="text-sm font-medium text-txt group-hover:text-accent transition-colors">{lead.nome || '-'}</span>
+                            <span className="text-sm font-medium text-txt group-hover:text-[#004AFF] transition-colors">{lead.nome || '-'}</span>
                             <span className="text-[11px] text-txt-dim font-mono">{formatTelefone(lead.telefone)}</span>
                           </div>
                         </td>
@@ -413,30 +527,13 @@ export const Leads: React.FC = () => {
             </div>
 
             {/* Pagination */}
-            <div className="px-5 py-4 border-t border-surface-300/20 flex items-center justify-between">
-              <span className="text-[11px] text-txt-muted font-mono">
-                {total === 0
-                  ? '0 de 0'
-                  : `${(currentPage - 1) * itemsPerPage + 1}-${Math.min(currentPage * itemsPerPage, total)} de ${total}`
-                }
-              </span>
-              <div className="flex gap-1.5">
-                <button
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="p-2 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="p-2 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
+            <Pagination
+              current={currentPage}
+              total={total}
+              totalPages={totalPages}
+              itemsPerPage={itemsPerPage}
+              onChange={setCurrentPage}
+            />
           </div>
         </>
       )}
@@ -582,30 +679,13 @@ export const Leads: React.FC = () => {
             </div>
 
             {/* Pagination */}
-            <div className="px-5 py-4 border-t border-surface-300/20 flex items-center justify-between">
-              <span className="text-[11px] text-txt-muted font-mono">
-                {premiumTotal === 0
-                  ? '0 de 0'
-                  : `${(premiumPage - 1) * itemsPerPage + 1}-${Math.min(premiumPage * itemsPerPage, premiumTotal)} de ${premiumTotal}`
-                }
-              </span>
-              <div className="flex gap-1.5">
-                <button
-                  onClick={() => setPremiumPage(p => Math.max(1, p - 1))}
-                  disabled={premiumPage === 1}
-                  className="p-2 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => setPremiumPage(p => Math.min(premiumTotalPages, p + 1))}
-                  disabled={premiumPage === premiumTotalPages}
-                  className="p-2 border border-surface-300/30 rounded-lg hover:bg-surface-200/40 hover:border-surface-300/50 disabled:opacity-30 disabled:cursor-not-allowed transition-all text-txt-muted hover:text-txt"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
+            <Pagination
+              current={premiumPage}
+              total={premiumTotal}
+              totalPages={premiumTotalPages}
+              itemsPerPage={itemsPerPage}
+              onChange={setPremiumPage}
+            />
           </div>
         </>
       )}

@@ -22,7 +22,7 @@ export const EnviosNav: React.FC = () => {
             'flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-medium transition-all duration-200',
             isActive
               ? 'bg-surface-200/60 text-txt shadow-sm border-glow'
-              : 'text-txt-muted hover:text-txt-secondary hover:bg-surface-200/20'
+              : 'text-[#A8A8B3] hover:text-[#D4D4DB] hover:bg-surface-200/20'
           )}
         >
           <tab.icon className="w-3.5 h-3.5" />

@@ -166,10 +166,10 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
     <div
       className={cn(
         'card-dark p-5 transition-all duration-300',
-        isModified && 'border-accent/30',
+        isModified && 'border-[#004AFF]/30',
         disabled && 'opacity-50'
       )}
-      style={isModified && !disabled ? { borderColor: 'rgba(6, 182, 212, 0.3)' } : undefined}
+      style={isModified && !disabled ? { borderColor: 'rgba(0, 74, 255, 0.3)' } : undefined}
     >
       {/* ── Header ── */}
       <div className="flex items-start justify-between gap-3 mb-4">
@@ -182,7 +182,7 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
                 disabled={disabled}
                 onChange={(e) => onUpdate({ titulo: e.target.value })}
                 className={cn(
-                  'text-sm font-semibold text-txt font-display bg-transparent outline-none border-b border-transparent focus:border-accent/30 transition-colors w-full max-w-[280px]',
+                  'text-sm font-semibold text-txt font-display bg-transparent outline-none border-b border-transparent focus:border-[#004AFF]/30 transition-colors w-full max-w-[280px]',
                   disabled && 'cursor-not-allowed'
                 )}
                 placeholder="Título do follow-up"
@@ -203,7 +203,7 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
               disabled={disabled}
               onChange={(e) => onUpdate({ descricao: e.target.value })}
               className={cn(
-                'text-[11px] text-txt-muted mt-0.5 bg-transparent outline-none border-b border-transparent focus:border-accent/20 transition-colors w-full',
+                'text-[11px] text-txt-muted mt-0.5 bg-transparent outline-none border-b border-transparent focus:border-[#004AFF]/20 transition-colors w-full',
                 disabled && 'cursor-not-allowed'
               )}
               placeholder="Descrição do cenário"
@@ -272,7 +272,7 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
             disabled={disabled}
             onChange={(e) => onUpdate({ status_alvo: e.target.value })}
             className={cn(
-              'w-full px-3 py-2 rounded-xl text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-accent/30 transition-colors appearance-none cursor-pointer',
+              'w-full px-3 py-2 rounded-xl text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-[#004AFF]/30 transition-colors appearance-none cursor-pointer',
               disabled && 'cursor-not-allowed opacity-60'
             )}
             style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center' }}
@@ -302,7 +302,7 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
             onUpdate({ tempo_espera_minutos: raw === '' ? null : parseInt(raw, 10) });
           }}
           className={cn(
-            'w-20 px-3 py-1.5 rounded-lg text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-accent/30 transition-colors text-center',
+            'w-20 px-3 py-1.5 rounded-lg text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-[#004AFF]/30 transition-colors text-center',
             disabled && 'cursor-not-allowed'
           )}
         />
@@ -345,7 +345,7 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
               }}
               placeholder="Digite a mensagem..."
               className={cn(
-                'w-full px-4 py-3 rounded-xl text-[13px] text-txt placeholder-txt-dim bg-surface outline-none border border-surface-200 focus:border-accent/30 transition-all duration-200 resize-none leading-relaxed',
+                'w-full px-4 py-3 rounded-xl text-[13px] text-txt placeholder-txt-dim bg-surface outline-none border border-surface-200 focus:border-[#004AFF]/30 transition-all duration-200 resize-none leading-relaxed',
                 disabled && 'cursor-not-allowed'
               )}
               style={{ minHeight: '80px' }}
@@ -357,14 +357,14 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => insertVariable(index, '{{nome}}')}
-                    className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors border border-accent/20"
+                    className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-[#004AFF]/10 text-[#004AFF] hover:bg-[#004AFF]/20 transition-colors border border-[#004AFF]/20"
                   >
                     {'{{nome}}'}
                   </button>
                   {mensagem.tipo_envio === 'audio' && (
                     <button
                       onClick={() => insertVariable(index, '(inhale)')}
-                      className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors border border-accent/20"
+                      className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-[#004AFF]/10 text-[#004AFF] hover:bg-[#004AFF]/20 transition-colors border border-[#004AFF]/20"
                     >
                       (inhale)
                     </button>
@@ -415,7 +415,7 @@ export const FollowupCard: React.FC<FollowupCardProps> = ({
           disabled={disabled || testing || !mensagem.mensagens.some((m) => m.trim())}
           className={cn(
             'flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-[12px] font-medium transition-all duration-200 border',
-            'text-txt-secondary border-surface-200 hover:border-accent/30 hover:text-accent hover:bg-accent/5',
+            'text-txt-secondary border-surface-200 hover:border-[#004AFF]/30 hover:text-[#004AFF] hover:bg-[#004AFF]/5',
             'disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-surface-200 disabled:hover:text-txt-secondary disabled:hover:bg-transparent'
           )}
         >

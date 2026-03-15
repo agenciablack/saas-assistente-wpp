@@ -184,8 +184,8 @@ const TimerIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg viewBox="0 0 40 40" fill="none" className={className}>
     <defs>
       <linearGradient id="timer-grad" x1="8" y1="4" x2="32" y2="36" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#22d3ee" />
-        <stop offset="100%" stopColor="#0891b2" />
+        <stop offset="0%" stopColor="#004AFF" />
+        <stop offset="100%" stopColor="#0040E0" />
       </linearGradient>
       <linearGradient id="timer-inner" x1="12" y1="10" x2="28" y2="34" gradientUnits="userSpaceOnUse">
         <stop offset="0%" stopColor="#fff" stopOpacity="0.12" />
@@ -332,7 +332,7 @@ const TorneioModal: React.FC<ModalProps> = ({ torneio, onClose, onSave, saving }
             <button
               type="submit"
               disabled={saving || !nome.trim() || !dataInicio || !dataFim}
-              className="flex items-center gap-2 px-5 py-2 rounded-xl text-[13px] font-semibold text-white bg-accent hover:bg-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-5 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#004AFF] hover:bg-[#004AFF]/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               {torneio ? 'Salvar' : 'Criar Torneio'}
@@ -475,7 +475,7 @@ const EnviarRankingModal: React.FC<EnviarRankingModalProps> = ({ ranking, tornei
       <div className="relative card-dark-elevated w-full max-w-lg animate-slide-up max-h-[90vh] flex flex-col">
         <div className="flex items-center justify-between p-5 border-b border-surface-300/20 shrink-0">
           <h2 className="text-[15px] font-semibold text-txt font-display flex items-center gap-2">
-            <Send className="w-4 h-4 text-accent" />
+            <Send className="w-4 h-4 text-[#004AFF]" />
             Enviar Ranking via WhatsApp
           </h2>
           <button onClick={onClose} className="p-1.5 text-txt-muted hover:text-txt hover:bg-surface-200/40 rounded-lg transition-colors">
@@ -535,7 +535,7 @@ const EnviarRankingModal: React.FC<EnviarRankingModalProps> = ({ ranking, tornei
           <button
             onClick={handleEnviar}
             disabled={enviando || !instObj || !numDestino.trim() || numDestino.length < 10}
-            className="flex items-center gap-2 px-5 py-2 rounded-xl text-[13px] font-semibold text-white bg-accent hover:bg-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-5 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#004AFF] hover:bg-[#004AFF]/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {enviando ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             {enviando ? 'Enviando...' : 'Enviar'}
@@ -1030,13 +1030,13 @@ export const Torneios: React.FC = () => {
 
             {/* Card 2 — Tempo Restante */}
             <div className="card-dark p-5 group transition-all duration-500 relative overflow-hidden hover:scale-[1.01]">
-              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400/60 via-cyan-500/30 to-transparent" />
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/[0.04] rounded-full blur-2xl group-hover:bg-cyan-500/[0.08] transition-all duration-700" />
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-blue-500/60 via-blue-600/30 to-transparent" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-600/[0.04] rounded-full blur-2xl group-hover:bg-blue-600/[0.08] transition-all duration-700" />
               <div className="relative z-10">
                 <div className="flex justify-between items-start mb-4">
                   <div className="relative">
                     <TimerIcon className="w-11 h-11" />
-                    <div className="absolute inset-0 bg-cyan-400/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-blue-500/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
                 </div>
                 <p className="text-txt-muted text-[10px] font-mono font-semibold uppercase tracking-[0.12em] mb-1.5">Tempo Restante</p>
@@ -1059,7 +1059,7 @@ export const Torneios: React.FC = () => {
                           </div>
                           <div className="text-[8px] text-txt-muted font-mono font-semibold uppercase tracking-widest mt-1">{u.label}</div>
                         </div>
-                        {i < 3 && <span className="text-cyan-500/40 font-bold text-lg self-start mt-0.5">:</span>}
+                        {i < 3 && <span className="text-blue-600/40 font-bold text-lg self-start mt-0.5">:</span>}
                       </React.Fragment>
                     ))}
                   </div>
@@ -1121,7 +1121,7 @@ export const Torneios: React.FC = () => {
             <h3 className="text-sm font-semibold text-txt font-display">Todos os Torneios</h3>
             <button
               onClick={() => { setEditando(null); setModalOpen(true); }}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-accent hover:bg-accent/80 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#004AFF] hover:bg-[#004AFF]/80 transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               Novo Torneio
@@ -1159,7 +1159,7 @@ export const Torneios: React.FC = () => {
                   ) : (
                     torneios.map(t => (
                       <tr key={t.id} className="border-b border-surface-300/10 hover:bg-surface-200/20 transition-colors duration-150 group">
-                        <td className="px-5 py-4 text-sm font-medium text-txt group-hover:text-accent transition-colors">{t.nome}</td>
+                        <td className="px-5 py-4 text-sm font-medium text-txt group-hover:text-[#004AFF] transition-colors">{t.nome}</td>
                         <td className="px-5 py-4 text-[12px] text-txt-secondary font-mono">{fmtDate(t.data_inicio)}</td>
                         <td className="px-5 py-4 text-[12px] text-txt-secondary font-mono">{fmtDate(t.data_fim)}</td>
                         <td className="px-5 py-4"><StatusBadge status={t.status} /></td>
@@ -1260,7 +1260,7 @@ export const Torneios: React.FC = () => {
             <button
               onClick={() => setEnviarRankingOpen(true)}
               disabled={ranking.length === 0}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-medium bg-accent/10 text-accent hover:bg-accent/20 border border-accent/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-medium bg-[#004AFF]/10 text-[#004AFF] hover:bg-[#004AFF]/20 border border-[#004AFF]/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Send className="w-3.5 h-3.5" />
               Enviar Ranking
@@ -1275,7 +1275,7 @@ export const Torneios: React.FC = () => {
                   checked={autoRefresh}
                   onChange={e => setAutoRefresh(e.target.checked)}
                 />
-                <div className="w-9 h-5 bg-surface-300/40 rounded-full peer peer-checked:bg-accent/30 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-txt-dim after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:bg-accent"></div>
+                <div className="w-9 h-5 bg-surface-300/40 rounded-full peer peer-checked:bg-[#004AFF]/30 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-txt-dim after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:bg-[#004AFF]"></div>
               </div>
               {autoRefresh && <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />}
             </label>
@@ -1538,14 +1538,14 @@ export const Torneios: React.FC = () => {
           {/* Stats strip */}
           <div className="card-dark relative overflow-hidden">
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-0 left-1/4 w-[300px] h-[100px] bg-cyan-500/[0.03] rounded-full blur-[60px]" />
+              <div className="absolute top-0 left-1/4 w-[300px] h-[100px] bg-blue-600/[0.03] rounded-full blur-[60px]" />
               <div className="absolute top-0 right-1/4 w-[200px] h-[100px] bg-amber-500/[0.03] rounded-full blur-[60px]" />
             </div>
             <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-surface-300/10">
               {/* Total */}
               <div className="p-5 flex items-center gap-4 group">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/15 to-cyan-500/5 border border-cyan-500/10 flex items-center justify-center shrink-0 group-hover:border-cyan-500/20 transition-colors">
-                  <Users className="w-5 h-5 text-cyan-400" strokeWidth={1.75} />
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600/15 to-blue-600/5 border border-blue-600/10 flex items-center justify-center shrink-0 group-hover:border-blue-600/20 transition-colors">
+                  <Users className="w-5 h-5 text-blue-400" strokeWidth={1.75} />
                 </div>
                 <div>
                   <p className="text-[10px] font-mono font-semibold text-txt-muted uppercase tracking-[0.12em] mb-0.5">Total Participantes</p>
@@ -1601,7 +1601,7 @@ export const Torneios: React.FC = () => {
 
           {/* Search bar */}
           <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-muted group-focus-within:text-accent transition-colors" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-txt-muted group-focus-within:text-[#004AFF] transition-colors" />
             <input
               type="text"
               value={partBusca}
@@ -1645,7 +1645,7 @@ export const Torneios: React.FC = () => {
                   {participantes.length === 0 ? 'Nenhum participante neste torneio' : 'Nenhum resultado encontrado'}
                 </p>
                 {partBusca && (
-                  <button onClick={() => setPartBusca('')} className="mt-3 text-[12px] text-accent hover:text-accent/80 font-medium transition-colors">
+                  <button onClick={() => setPartBusca('')} className="mt-3 text-[12px] text-[#004AFF] hover:text-[#004AFF]/80 font-medium transition-colors">
                     Limpar busca
                   </button>
                 )}
@@ -1697,7 +1697,7 @@ export const Torneios: React.FC = () => {
                             className={cn(
                               'border-b border-surface-300/10 transition-all duration-150 group cursor-pointer',
                               isExpanded
-                                ? 'bg-accent/[0.04] hover:bg-accent/[0.06]'
+                                ? 'bg-[#004AFF]/[0.04] hover:bg-[#004AFF]/[0.06]'
                                 : pendingId
                                   ? 'hover:bg-amber-500/[0.03]'
                                   : 'hover:bg-surface-200/20'
@@ -1710,12 +1710,12 @@ export const Torneios: React.FC = () => {
                                   'w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[11px] font-bold font-display border transition-colors',
                                   pendingId
                                     ? 'bg-amber-500/10 text-amber-400 border-amber-500/15'
-                                    : 'bg-accent/10 text-accent border-accent/15'
+                                    : 'bg-[#004AFF]/10 text-[#004AFF] border-[#004AFF]/15'
                                 )}>
                                   {(p.participante_nome || fmtPhone(p.telefone_whatsapp)).charAt(0).toUpperCase()}
                                 </div>
                                 <div className="min-w-0">
-                                  <span className="text-[13px] font-medium text-txt group-hover:text-accent transition-colors block truncate">
+                                  <span className="text-[13px] font-medium text-txt group-hover:text-[#004AFF] transition-colors block truncate">
                                     {p.participante_nome || fmtPhone(p.telefone_whatsapp)}
                                   </span>
                                   {p.participante_nome && (
@@ -1786,11 +1786,11 @@ export const Torneios: React.FC = () => {
                           {isExpanded && (
                             <tr>
                               <td colSpan={7} className="p-0">
-                                <div className="bg-accent/[0.02] border-b border-surface-300/10 animate-slide-up">
+                                <div className="bg-[#004AFF]/[0.02] border-b border-surface-300/10 animate-slide-up">
                                   {/* Expanded header */}
                                   <div className="px-6 py-3 border-b border-surface-300/8 flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                      <span className="text-[10px] font-mono font-semibold text-accent/70 uppercase tracking-[0.12em]">
+                                      <span className="text-[10px] font-mono font-semibold text-[#004AFF]/70 uppercase tracking-[0.12em]">
                                         Historico de Greens
                                       </span>
                                       {!expandedLoading && (
@@ -1803,7 +1803,7 @@ export const Torneios: React.FC = () => {
 
                                   {expandedLoading ? (
                                     <div className="flex items-center gap-2 py-6 justify-center">
-                                      <Loader2 className="w-4 h-4 animate-spin text-accent" />
+                                      <Loader2 className="w-4 h-4 animate-spin text-[#004AFF]" />
                                       <span className="text-[12px] text-txt-muted font-mono">Carregando...</span>
                                     </div>
                                   ) : expandedGreens.length === 0 ? (
@@ -1911,7 +1911,7 @@ export const Torneios: React.FC = () => {
                 <button
                   onClick={handleEditIdConta}
                   disabled={editIdContaSaving}
-                  className="flex items-center gap-2 px-5 py-2 rounded-xl text-[13px] font-semibold text-white bg-accent hover:bg-accent/80 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-5 py-2 rounded-xl text-[13px] font-semibold text-white bg-[#004AFF] hover:bg-[#004AFF]/80 transition-colors disabled:opacity-50"
                 >
                   {editIdContaSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Salvar

@@ -15,11 +15,11 @@ export default {
           400: '#52525B',
         },
         accent: {
-          DEFAULT: '#06B6D4',
-          muted: '#0891B2',
-          bright: '#22D3EE',
-          dim: 'rgba(6, 182, 212, 0.12)',
-          glow: 'rgba(6, 182, 212, 0.25)',
+          DEFAULT: '#004AFF',
+          muted: '#0040E0',
+          bright: '#3370FF',
+          dim: 'rgba(0, 74, 255, 0.12)',
+          glow: 'rgba(0, 74, 255, 0.25)',
         },
         txt: {
           DEFAULT: '#FAFAFA',
@@ -63,8 +63,8 @@ export default {
           '100%': { opacity: '1', transform: 'translateX(0)' },
         },
         glowPulse: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.05)' },
-          '50%': { boxShadow: '0 0 40px rgba(6, 182, 212, 0.12)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(0, 74, 255, 0.05)' },
+          '50%': { boxShadow: '0 0 40px rgba(0, 74, 255, 0.12)' },
         },
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
@@ -95,7 +95,7 @@ export default {
       backgroundImage: {
         'noise': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E\")",
         'grid-pattern': 'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
-        'mesh-gradient': 'radial-gradient(ellipse at 20% 50%, rgba(6, 182, 212, 0.06) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.04) 0%, transparent 50%), radial-gradient(ellipse at 60% 80%, rgba(6, 182, 212, 0.03) 0%, transparent 50%)',
+        'mesh-gradient': 'radial-gradient(ellipse at 20% 50%, rgba(0, 74, 255, 0.06) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(0, 74, 255, 0.04) 0%, transparent 50%), radial-gradient(ellipse at 60% 80%, rgba(0, 74, 255, 0.03) 0%, transparent 50%)',
       },
       backgroundSize: {
         'grid': '24px 24px',

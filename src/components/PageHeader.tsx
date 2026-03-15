@@ -35,7 +35,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <button
             onClick={onRefresh}
             disabled={isRefreshing}
-            className="p-2.5 text-txt-muted hover:text-accent hover:bg-accent/5 rounded-xl transition-all duration-200 disabled:opacity-50 border border-transparent hover:border-accent/10"
+            className="p-2.5 text-txt-muted hover:text-[#004AFF] hover:bg-[#004AFF]/5 rounded-xl transition-all duration-200 disabled:opacity-50 border border-transparent hover:border-[#004AFF]/10"
             title="Atualizar dados"
           >
             <RefreshCw className={cn("w-4 h-4", isRefreshing && "animate-spin")} />

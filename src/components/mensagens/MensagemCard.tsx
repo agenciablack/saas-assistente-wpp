@@ -133,10 +133,10 @@ export const MensagemCard: React.FC<MensagemCardProps> = ({
     <div
       className={cn(
         'card-dark p-5 transition-all duration-300',
-        isModified && 'border-accent/30',
+        isModified && 'border-[#004AFF]/30',
         disabled && 'opacity-50'
       )}
-      style={isModified && !disabled ? { borderColor: 'rgba(6, 182, 212, 0.3)' } : undefined}
+      style={isModified && !disabled ? { borderColor: 'rgba(0, 74, 255, 0.3)' } : undefined}
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-4">
@@ -213,7 +213,7 @@ export const MensagemCard: React.FC<MensagemCardProps> = ({
               onUpdate({ tempo_espera_minutos: raw === '' ? null : parseInt(raw, 10) });
             }}
             className={cn(
-              'w-20 px-3 py-1.5 rounded-lg text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-accent/30 transition-colors text-center',
+              'w-20 px-3 py-1.5 rounded-lg text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-[#004AFF]/30 transition-colors text-center',
               disabled && 'cursor-not-allowed'
             )}
           />
@@ -236,7 +236,7 @@ export const MensagemCard: React.FC<MensagemCardProps> = ({
               }}
               placeholder="Digite a mensagem..."
               className={cn(
-                'w-full px-4 py-3 rounded-xl text-[13px] text-txt placeholder-txt-dim bg-surface outline-none border border-surface-200 focus:border-accent/30 transition-all duration-200 resize-none leading-relaxed',
+                'w-full px-4 py-3 rounded-xl text-[13px] text-txt placeholder-txt-dim bg-surface outline-none border border-surface-200 focus:border-[#004AFF]/30 transition-all duration-200 resize-none leading-relaxed',
                 disabled && 'cursor-not-allowed'
               )}
               style={{ minHeight: '80px' }}
@@ -248,13 +248,13 @@ export const MensagemCard: React.FC<MensagemCardProps> = ({
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => insertVariable(index, '{{nome}}')}
-                    className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors border border-accent/20"
+                    className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-[#004AFF]/10 text-[#004AFF] hover:bg-[#004AFF]/20 transition-colors border border-[#004AFF]/20"
                   >
                     {'{{nome}}'}
                   </button>
                   <button
                     onClick={() => insertVariable(index, '(inhale)')}
-                    className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors border border-accent/20"
+                    className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-[#004AFF]/10 text-[#004AFF] hover:bg-[#004AFF]/20 transition-colors border border-[#004AFF]/20"
                   >
                     (inhale)
                   </button>
@@ -302,7 +302,7 @@ export const MensagemCard: React.FC<MensagemCardProps> = ({
         disabled={disabled || testing || !mensagem.mensagens.some((m) => m.trim())}
         className={cn(
           'flex items-center justify-center gap-2 w-full py-2 rounded-xl text-[12px] font-medium transition-all duration-200 border',
-          'text-txt-secondary border-surface-200 hover:border-accent/30 hover:text-accent hover:bg-accent/5',
+          'text-txt-secondary border-surface-200 hover:border-[#004AFF]/30 hover:text-[#004AFF] hover:bg-[#004AFF]/5',
           'disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-surface-200 disabled:hover:text-txt-secondary disabled:hover:bg-transparent'
         )}
       >

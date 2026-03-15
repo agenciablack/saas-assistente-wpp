@@ -97,7 +97,7 @@ export const Configuracoes: React.FC = () => {
             {!showSenha ? (
               <button
                 onClick={() => setShowSenha(true)}
-                className="text-xs text-accent font-medium hover:text-cyan-300 transition-colors"
+                className="text-xs text-[#004AFF] font-medium hover:text-blue-300 transition-colors"
               >
                 Alterar senha
               </button>
@@ -160,7 +160,7 @@ export const Configuracoes: React.FC = () => {
                   checked={notificarNovosLeads}
                   onChange={(e) => setNotificarNovosLeads(e.target.checked)}
                 />
-                <div className="w-10 h-5 bg-surface-300/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-5 peer-checked:after:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-txt-dim after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent/30 peer-checked:after:bg-accent"></div>
+                <div className="w-10 h-5 bg-surface-300/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-5 peer-checked:after:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-txt-dim after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#004AFF]/30 peer-checked:after:bg-[#004AFF]"></div>
               </label>
             </div>
             <div className="h-px bg-surface-300/15" />
@@ -176,7 +176,7 @@ export const Configuracoes: React.FC = () => {
                   checked={notificarConversoes}
                   onChange={(e) => setNotificarConversoes(e.target.checked)}
                 />
-                <div className="w-10 h-5 bg-surface-300/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-5 peer-checked:after:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-txt-dim after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent/30 peer-checked:after:bg-accent"></div>
+                <div className="w-10 h-5 bg-surface-300/40 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-5 peer-checked:after:border-transparent after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-txt-dim after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#004AFF]/30 peer-checked:after:bg-[#004AFF]"></div>
               </label>
             </div>
           </div>

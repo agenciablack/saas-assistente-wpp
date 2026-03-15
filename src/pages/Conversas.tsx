@@ -45,7 +45,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
   interessado:                    { label: 'Interessado',          color: '#34D399', bg: 'rgba(52, 211, 153, 0.1)' },
   aguardando_cadastro:            { label: 'Aguardando Cadastro',  color: '#FB923C', bg: 'rgba(251, 146, 60, 0.1)' },
   link_enviado:                   { label: 'Link Enviado',         color: '#A78BFA', bg: 'rgba(167, 139, 250, 0.1)' },
-  aguardando_confirmacao_entrada: { label: 'Aguard. Confirmação',  color: '#22D3EE', bg: 'rgba(34, 211, 238, 0.1)' },
+  aguardando_confirmacao_entrada: { label: 'Aguard. Confirmação',  color: '#3370FF', bg: 'rgba(51, 112, 255, 0.1)' },
   no_grupo:                       { label: 'No Grupo',             color: '#34D399', bg: 'rgba(52, 211, 153, 0.1)' },
   entrou_grupo:                   { label: 'No Grupo',             color: '#34D399', bg: 'rgba(52, 211, 153, 0.1)' },
   nao_interessado:                { label: 'Não Interessado',      color: '#71717A', bg: 'rgba(113, 113, 122, 0.1)' },
@@ -69,7 +69,7 @@ function getInitial(nome: string | null, telefone: string): string {
 
 function getAvatarColor(telefone: string): string {
   const colors = [
-    'linear-gradient(135deg, #0891B2 0%, #06B6D4 100%)',
+    'linear-gradient(135deg, #0040E0 0%, #004AFF 100%)',
     'linear-gradient(135deg, #7C3AED 0%, #8B5CF6 100%)',
     'linear-gradient(135deg, #0284C7 0%, #38BDF8 100%)',
     'linear-gradient(135deg, #059669 0%, #34D399 100%)',
@@ -158,8 +158,8 @@ function AudioPlayer({ url, enviada }: { url: string; enviada: boolean }) {
     return () => { a.removeEventListener('timeupdate', onTime); a.removeEventListener('loadedmetadata', onLoad); a.removeEventListener('ended', onEnd) }
   }, [])
 
-  const accentColor = enviada ? '#06B6D4' : '#71717A'
-  const accentFaded = enviada ? 'rgba(6, 182, 212, 0.25)' : 'rgba(113, 113, 122, 0.25)'
+  const accentColor = enviada ? '#004AFF' : '#71717A'
+  const accentFaded = enviada ? 'rgba(0, 74, 255, 0.25)' : 'rgba(113, 113, 122, 0.25)'
   const barCount = 24
   const bars = Array.from({ length: barCount }, (_, i) => {
     const filled = i / barCount <= progress
@@ -211,7 +211,7 @@ function ImageLightbox({ url, onClose }: { url: string; onClose: () => void }) {
       onClick={onClose}
     >
       <button
-        className="absolute top-5 right-5 w-9 h-9 rounded-xl flex items-center justify-center bg-surface-100 border border-glass-border text-txt-secondary hover:text-txt hover:border-accent/30 transition-all duration-200"
+        className="absolute top-5 right-5 w-9 h-9 rounded-xl flex items-center justify-center bg-surface-100 border border-glass-border text-txt-secondary hover:text-txt hover:border-[#004AFF]/30 transition-all duration-200"
         onClick={onClose}
       >
         <X size={16} />
@@ -232,7 +232,7 @@ function MensagemBubble({ msg, onImageClick }: { msg: Mensagem; onImageClick: (u
   const enviada = msg.direcao === 'enviada'
 
   const bubbleClasses = enviada
-    ? 'bg-accent/15 border border-accent/10'
+    ? 'bg-[#004AFF]/15 border border-[#004AFF]/10'
     : 'bg-surface-100 border border-glass-border'
 
   const bubbleRadius = enviada
@@ -274,7 +274,7 @@ function MensagemBubble({ msg, onImageClick }: { msg: Mensagem; onImageClick: (u
           <span className="text-[11px] text-txt-dim">
             {formatFullTime(msg.created_at)}
           </span>
-          {enviada && <span className="text-[11px] text-accent/60">✓✓</span>}
+          {enviada && <span className="text-[11px] text-[#004AFF]/60">✓✓</span>}
         </div>
       </div>
     </div>
@@ -305,7 +305,7 @@ function ConversaItem({
         flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-200
         border-l-2
         ${selected
-          ? 'bg-accent/[0.06] border-l-accent'
+          ? 'bg-[#004AFF]/[0.06] border-l-accent'
           : 'border-l-transparent hover:bg-glass-hover'
         }
       `}
@@ -331,12 +331,12 @@ function ConversaItem({
 
         <div className="flex items-center justify-between mt-0.5">
           <span className="truncate text-[12px] text-txt-muted" style={{ maxWidth: '80%' }}>
-            {conversa.direcao === 'enviada' && <span className="text-accent">Você: </span>}
+            {conversa.direcao === 'enviada' && <span className="text-[#004AFF]">Você: </span>}
             {previewIcon(conversa)}
             {previewMsg(conversa)}
           </span>
           {unread > 0 && (
-            <span className="flex-shrink-0 rounded-full flex items-center justify-center font-semibold text-[10px] min-w-[18px] h-[18px] px-1 ml-1 bg-accent text-surface">
+            <span className="flex-shrink-0 rounded-full flex items-center justify-center font-semibold text-[10px] min-w-[18px] h-[18px] px-1 ml-1 bg-[#004AFF] text-surface">
               {unread}
             </span>
           )}
@@ -631,7 +631,7 @@ export default function Conversas() {
                 className={`
                   flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[12px] font-medium transition-all duration-200 border
                   ${filtroAberto || activeFilterCount > 0
-                    ? 'bg-accent/10 text-accent border-accent/25'
+                    ? 'bg-[#004AFF]/10 text-[#004AFF] border-[#004AFF]/25'
                     : 'bg-surface-100 text-txt-muted border-glass-border hover:border-surface-300/40 hover:text-txt-secondary'
                   }
                 `}
@@ -639,7 +639,7 @@ export default function Conversas() {
                 <SlidersHorizontal size={13} />
                 Filtros
                 {activeFilterCount > 0 && (
-                  <span className="flex items-center justify-center w-4 h-4 rounded-full bg-accent text-surface text-[10px] font-semibold">
+                  <span className="flex items-center justify-center w-4 h-4 rounded-full bg-[#004AFF] text-surface text-[10px] font-semibold">
                     {activeFilterCount}
                   </span>
                 )}
@@ -656,7 +656,7 @@ export default function Conversas() {
                       {filtroStatus && (
                         <button
                           onClick={() => setFiltroStatus(null)}
-                          className="text-[10px] text-accent hover:text-accent-bright transition-colors"
+                          className="text-[10px] text-[#004AFF] hover:text-[#004AFF]-bright transition-colors"
                         >
                           Limpar
                         </button>
@@ -683,7 +683,7 @@ export default function Conversas() {
                               style={{ background: cfg.color }}
                             />
                             <span className="flex-1">{cfg.label}</span>
-                            {active && <Check size={12} className="text-accent flex-shrink-0" />}
+                            {active && <Check size={12} className="text-[#004AFF] flex-shrink-0" />}
                           </button>
                         )
                       })}
@@ -699,7 +699,7 @@ export default function Conversas() {
                       {filtroInstancia && (
                         <button
                           onClick={() => setFiltroInstancia(null)}
-                          className="text-[10px] text-accent hover:text-accent-bright transition-colors"
+                          className="text-[10px] text-[#004AFF] hover:text-[#004AFF]-bright transition-colors"
                         >
                           Limpar
                         </button>
@@ -721,7 +721,7 @@ export default function Conversas() {
                             `}
                           >
                             <span className="flex-1">{inst}</span>
-                            {active && <Check size={12} className="text-accent flex-shrink-0" />}
+                            {active && <Check size={12} className="text-[#004AFF] flex-shrink-0" />}
                           </button>
                         )
                       })}
@@ -735,7 +735,7 @@ export default function Conversas() {
                       <div className="p-2">
                         <button
                           onClick={() => { setFiltroStatus(null); setFiltroInstancia(null) }}
-                          className="w-full py-1.5 rounded-lg text-[12px] text-txt-muted hover:text-accent hover:bg-accent/5 transition-all duration-150"
+                          className="w-full py-1.5 rounded-lg text-[12px] text-txt-muted hover:text-[#004AFF] hover:bg-[#004AFF]/5 transition-all duration-150"
                         >
                           Limpar todos os filtros
                         </button>
@@ -766,7 +766,7 @@ export default function Conversas() {
               {filtroInstancia && (
                 <button
                   onClick={() => setFiltroInstancia(null)}
-                  className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-medium border bg-accent/10 text-accent border-accent/20 transition-all duration-150 hover:opacity-80"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-medium border bg-[#004AFF]/10 text-[#004AFF] border-[#004AFF]/20 transition-all duration-150 hover:opacity-80"
                 >
                   {filtroInstancia}
                   <X size={10} />
@@ -875,7 +875,7 @@ export default function Conversas() {
                     flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] transition-all duration-200 border
                     ${muted
                       ? 'bg-surface-100 text-txt-muted border-glass-border hover:border-surface-300/40'
-                      : 'bg-accent/10 text-accent border-accent/20 hover:bg-accent/15'
+                      : 'bg-[#004AFF]/10 text-[#004AFF] border-[#004AFF]/20 hover:bg-[#004AFF]/15'
                     }
                   `}
                   aria-label={muted ? 'Ativar som' : 'Silenciar som'}
@@ -891,7 +891,7 @@ export default function Conversas() {
               {loadingMsgs ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="flex flex-col items-center gap-3">
-                    <div className="w-6 h-6 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-[#004AFF]/30 border-t-accent rounded-full animate-spin" />
                     <span className="text-txt-dim text-[13px]">Carregando...</span>
                   </div>
                 </div>
@@ -939,7 +939,7 @@ export default function Conversas() {
                   disabled={enviando}
                   placeholder="Digite uma mensagem..."
                   rows={1}
-                  className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] text-white rounded-xl px-4 py-3 text-[14px] resize-none focus:outline-none focus:border-accent/40 transition-colors duration-200 placeholder:text-txt-dim disabled:opacity-50"
+                  className="flex-1 bg-[#1a1a1a] border border-[#2a2a2a] text-white rounded-xl px-4 py-3 text-[14px] resize-none focus:outline-none focus:border-[#004AFF]/40 transition-colors duration-200 placeholder:text-txt-dim disabled:opacity-50"
                   style={{ minHeight: 44, maxHeight: 120 }}
                 />
                 <button
@@ -948,7 +948,7 @@ export default function Conversas() {
                   className={`
                     flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200
                     ${msgTexto.trim() && !enviando
-                      ? 'bg-accent text-white hover:bg-accent/90 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
+                      ? 'bg-[#004AFF] text-white hover:bg-[#004AFF]/90 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
                       : 'bg-surface-200 text-txt-dim cursor-not-allowed'
                     }
                   `}

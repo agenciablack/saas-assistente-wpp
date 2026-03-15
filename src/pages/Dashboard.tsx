@@ -96,7 +96,7 @@ const DayPicker: React.FC<{
         }}
       >
         {/* Accent line */}
-        <div className="absolute top-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+        <div className="absolute top-0 left-3 right-3 h-[1px] bg-gradient-to-r from-transparent via-blue-600/30 to-transparent" />
 
         {/* Label */}
         <div className="text-[9px] uppercase tracking-[0.1em] text-txt-dim font-mono mb-2">{label}</div>
@@ -143,9 +143,9 @@ const DayPicker: React.FC<{
                   "w-full aspect-square rounded-lg text-[11px] font-mono transition-all duration-200 relative",
                   isFuture && "opacity-20 cursor-not-allowed",
                   isSelected
-                    ? "bg-accent text-surface font-semibold shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+                    ? "bg-[#004AFF] text-surface font-semibold shadow-[0_0_12px_rgba(16,185,129,0.3)]"
                     : isToday
-                    ? "text-accent ring-1 ring-accent/30 hover:bg-accent/10"
+                    ? "text-[#004AFF] ring-1 ring-[#004AFF]/30 hover:bg-[#004AFF]/10"
                     : "text-txt-secondary hover:bg-white/[0.04] hover:text-txt"
                 )}
               >
@@ -180,14 +180,14 @@ const PeriodSelector: React.FC<{
             className={cn(
               "px-3 py-1.5 rounded-lg text-[11px] font-medium font-display transition-all duration-300 relative",
               activePreset === key
-                ? "text-accent"
+                ? "text-[#004AFF]"
                 : "text-txt-muted hover:text-txt-secondary"
             )}
           >
             {activePreset === key && (
               <div
-                className="absolute inset-0 rounded-lg bg-accent/[0.08] border border-accent/20 pointer-events-none"
-                style={{ boxShadow: '0 0 16px rgba(6, 182, 212, 0.06)' }}
+                className="absolute inset-0 rounded-lg bg-[#004AFF]/[0.08] border border-[#004AFF]/20 pointer-events-none"
+                style={{ boxShadow: '0 0 16px rgba(0, 74, 255, 0.06)' }}
               />
             )}
             <span className="relative z-10">{label}</span>
@@ -209,7 +209,7 @@ const PeriodSelector: React.FC<{
             className={cn(
               "px-2 py-1 rounded-lg transition-all duration-200 tabular-nums",
               startPickerOpen
-                ? "bg-accent/10 text-accent border border-accent/20"
+                ? "bg-[#004AFF]/10 text-[#004AFF] border border-[#004AFF]/20"
                 : "text-txt-secondary hover:text-txt hover:bg-white/[0.03] border border-transparent"
             )}
           >
@@ -236,7 +236,7 @@ const PeriodSelector: React.FC<{
             className={cn(
               "px-2 py-1 rounded-lg transition-all duration-200 tabular-nums",
               endPickerOpen
-                ? "bg-accent/10 text-accent border border-accent/20"
+                ? "bg-[#004AFF]/10 text-[#004AFF] border border-[#004AFF]/20"
                 : "text-txt-secondary hover:text-txt hover:bg-white/[0.03] border border-transparent"
             )}
           >
@@ -277,7 +277,7 @@ const KpiDateRangePicker: React.FC<{
           className={cn(
             "px-2 py-1 rounded-lg transition-all duration-200 tabular-nums",
             startPickerOpen
-              ? "bg-accent/10 text-accent border border-accent/20"
+              ? "bg-[#004AFF]/10 text-[#004AFF] border border-[#004AFF]/20"
               : "text-txt-secondary hover:text-txt hover:bg-white/[0.03] border border-transparent"
           )}
         >
@@ -304,7 +304,7 @@ const KpiDateRangePicker: React.FC<{
           className={cn(
             "px-2 py-1 rounded-lg transition-all duration-200 tabular-nums",
             endPickerOpen
-              ? "bg-accent/10 text-accent border border-accent/20"
+              ? "bg-[#004AFF]/10 text-[#004AFF] border border-[#004AFF]/20"
               : "text-txt-secondary hover:text-txt hover:bg-white/[0.03] border border-transparent"
           )}
         >
@@ -338,7 +338,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
         backdropFilter: 'blur(20px)',
       }}
     >
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-cyan-500/40 via-cyan-500/20 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-blue-600/40 via-blue-600/20 to-transparent" />
       <p className="text-[10px] text-txt-muted font-mono mb-2.5 uppercase tracking-wider">
         {label ? format(parseLocalDate(label), "EEE, dd 'de' MMM", { locale: ptBR }) : ''}
       </p>
@@ -346,7 +346,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
         {payload.map((entry, i) => (
           <div key={i} className="flex items-center justify-between gap-6 text-xs">
             <div className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color || '#22D3EE', boxShadow: `0 0 6px ${entry.color || '#22D3EE'}40` }} />
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: entry.color || '#3370FF', boxShadow: `0 0 6px ${entry.color || '#3370FF'}40` }} />
               <span className="text-txt-secondary text-[11px]">{entry.name ?? ''}</span>
             </div>
             <span className="text-txt font-mono font-semibold text-[11px] tabular-nums">{entry.value ?? 0}</span>
@@ -504,7 +504,7 @@ export const Dashboard: React.FC = () => {
             <Bell className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
             {contadorNaoLidas > 0 && (
               <span className={cn(
-                "absolute -top-0.5 -right-0.5 h-4 bg-accent text-surface text-[9px] font-mono font-bold flex items-center justify-center rounded-full shadow-[0_0_8px_rgba(16,185,129,0.4)]",
+                "absolute -top-0.5 -right-0.5 h-4 bg-[#004AFF] text-surface text-[9px] font-mono font-bold flex items-center justify-center rounded-full shadow-[0_0_8px_rgba(16,185,129,0.4)]",
                 contadorNaoLidas > 99 ? "min-w-5 px-1" : "w-4"
               )}>
                 {contadorNaoLidas > 99 ? '99+' : contadorNaoLidas}
@@ -540,7 +540,7 @@ export const Dashboard: React.FC = () => {
             value={`${conversionRate}%`}
             subtitle={`${leadsNoGrupo} de ${totalLeads} entraram no grupo`}
             icon={TrendingUp}
-            color="cyan"
+            color="emerald"
             sparklineData={sparkConversao.length > 1 ? sparkConversao : undefined}
           />
         </div>
@@ -566,8 +566,8 @@ export const Dashboard: React.FC = () => {
           {/* Chart header row 1: Title + Period summary */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="p-1.5 rounded-lg bg-accent/10 ring-1 ring-accent/20">
-                <Activity className="w-3.5 h-3.5 text-accent" />
+              <div className="p-1.5 rounded-lg bg-[#004AFF]/10 ring-1 ring-[#004AFF]/20">
+                <Activity className="w-3.5 h-3.5 text-[#004AFF]" />
               </div>
               <h3 className="text-sm font-semibold text-txt font-display">{chartTitle}</h3>
             </div>
@@ -601,7 +601,7 @@ export const Dashboard: React.FC = () => {
               {[
                 { label: 'Total', color: '#FBBF24' },
                 { label: 'Interessados', color: '#34D399' },
-                { label: 'No Grupo', color: '#06B6D4' },
+                { label: 'No Grupo', color: '#004AFF' },
               ].map(({ label, color }) => (
                 <div key={label} className="flex items-center gap-1.5 group/legend cursor-default">
                   <div
@@ -629,8 +629,8 @@ export const Dashboard: React.FC = () => {
                       <stop offset="95%" stopColor="#34D399" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="gradientGrupo" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#06B6D4" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
+                      <stop offset="0%" stopColor="#004AFF" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#004AFF" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid
@@ -657,7 +657,7 @@ export const Dashboard: React.FC = () => {
                     tick={{ fill: '#52525B' }}
                     width={30}
                   />
-                  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(6, 182, 212, 0.03)' }} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0, 74, 255, 0.03)' }} />
                   <Area
                     type="monotone"
                     dataKey="leads_total"
@@ -689,11 +689,11 @@ export const Dashboard: React.FC = () => {
                     dataKey="no_grupo"
                     name="No Grupo"
                     fill="url(#gradientGrupo)"
-                    stroke="#06B6D4"
+                    stroke="#004AFF"
                     strokeWidth={1.5}
                     strokeOpacity={0.5}
                     dot={false}
-                    activeDot={{ r: 3, fill: '#06B6D4', stroke: '#0A0A0B', strokeWidth: 2 }}
+                    activeDot={{ r: 3, fill: '#004AFF', stroke: '#0A0A0B', strokeWidth: 2 }}
                     animationDuration={800}
                     animationEasing="ease-out"
                   />
@@ -717,7 +717,7 @@ export const Dashboard: React.FC = () => {
             <h3 className="text-sm font-semibold text-txt font-display">
               {kpiIsToday ? 'Leads de Hoje' : kpiIsSingleDay ? `Leads - ${format(kpiRange.start, 'dd/MM')}` : 'Leads do Periodo'}
             </h3>
-            <span className="text-[10px] text-accent font-mono font-semibold bg-accent/8 px-2.5 py-1 rounded-lg ring-1 ring-accent/15">
+            <span className="text-[10px] text-[#004AFF] font-mono font-semibold bg-[#004AFF]/8 px-2.5 py-1 rounded-lg ring-1 ring-[#004AFF]/15">
               {leadsPeriodo.length}
             </span>
           </div>
@@ -734,7 +734,7 @@ export const Dashboard: React.FC = () => {
                     {(lead.nome || '?')[0].toUpperCase()}
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[13px] font-medium text-txt group-hover:text-accent transition-colors duration-300">{lead.nome || 'Sem nome'}</span>
+                    <span className="text-[13px] font-medium text-txt group-hover:text-[#004AFF] transition-colors duration-300">{lead.nome || 'Sem nome'}</span>
                     <span className="text-[10px] text-txt-dim font-mono">{formatTelefone(lead.telefone)}</span>
                   </div>
                 </div>
@@ -754,7 +754,7 @@ export const Dashboard: React.FC = () => {
           <div className="mt-4 pt-4 border-t border-white/[0.04]">
             <button
               onClick={() => navigate('/leads')}
-              className="flex items-center justify-center w-full text-xs text-accent font-medium hover:text-cyan-300 transition-colors duration-300 group py-1"
+              className="flex items-center justify-center w-full text-xs text-[#004AFF] font-medium hover:text-blue-300 transition-colors duration-300 group py-1"
             >
               Ver todos <ArrowRight className="w-3.5 h-3.5 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" />
             </button>
@@ -773,12 +773,12 @@ export const Dashboard: React.FC = () => {
             <div className="card-dark-elevated overflow-hidden flex flex-col max-h-[70vh] animate-slide-up">
               <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.04]">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-1.5 rounded-lg bg-accent/10 ring-1 ring-accent/20">
-                    <Bell className="w-4 h-4 text-accent" />
+                  <div className="p-1.5 rounded-lg bg-[#004AFF]/10 ring-1 ring-[#004AFF]/20">
+                    <Bell className="w-4 h-4 text-[#004AFF]" />
                   </div>
                   <span className="text-sm font-semibold text-txt font-display">Notificacoes</span>
                   {contadorNaoLidas > 0 && (
-                    <span className="text-[10px] text-accent font-mono font-semibold bg-accent/8 px-2 py-0.5 rounded-lg ring-1 ring-accent/15">
+                    <span className="text-[10px] text-[#004AFF] font-mono font-semibold bg-[#004AFF]/8 px-2 py-0.5 rounded-lg ring-1 ring-[#004AFF]/15">
                       {contadorNaoLidas}
                     </span>
                   )}
@@ -787,7 +787,7 @@ export const Dashboard: React.FC = () => {
                   {notificacoes.length > 0 && (
                     <button
                       onClick={marcarTodasComoLidas}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] text-accent hover:text-cyan-300 font-medium transition-colors rounded-lg hover:bg-accent/5"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] text-[#004AFF] hover:text-blue-300 font-medium transition-colors rounded-lg hover:bg-[#004AFF]/5"
                     >
                       <CheckCheck className="w-3.5 h-3.5" />
                       Marcar todas como lidas

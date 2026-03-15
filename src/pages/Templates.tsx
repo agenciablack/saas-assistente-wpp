@@ -78,7 +78,7 @@ export const Templates: React.FC = () => {
       {/* Grid */}
       {loading ? (
         <div className="card-dark p-12 flex flex-col items-center justify-center text-center">
-          <Loader2 className="w-6 h-6 text-accent animate-spin mb-3" />
+          <Loader2 className="w-6 h-6 text-[#004AFF] animate-spin mb-3" />
           <p className="text-sm text-txt-muted">Carregando templates...</p>
         </div>
       ) : templates.length === 0 ? (

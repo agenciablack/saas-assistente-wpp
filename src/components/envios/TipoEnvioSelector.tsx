@@ -24,7 +24,7 @@ export const TipoEnvioSelector: React.FC<TipoEnvioSelectorProps> = ({ tipo, onCh
             className={cn(
               'flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 border',
               selected
-                ? 'bg-accent/10 border-accent/30 shadow-[inset_0_0_20px_rgba(16,185,129,0.03)]'
+                ? 'bg-[#004AFF]/10 border-[#004AFF]/30 shadow-[inset_0_0_20px_rgba(16,185,129,0.03)]'
                 : 'bg-surface-50/50 border-surface-300/20 hover:border-surface-300/40'
             )}
           >
@@ -32,16 +32,16 @@ export const TipoEnvioSelector: React.FC<TipoEnvioSelectorProps> = ({ tipo, onCh
             <div
               className={cn(
                 'w-[18px] h-[18px] rounded-full border-2 flex items-center justify-center transition-all duration-200 shrink-0',
-                selected ? 'border-accent' : 'border-surface-300/60'
+                selected ? 'border-[#004AFF]' : 'border-surface-300/60'
               )}
             >
               {selected && (
-                <div className="w-2 h-2 rounded-full bg-accent" />
+                <div className="w-2 h-2 rounded-full bg-[#004AFF]" />
               )}
             </div>
             <opt.icon className={cn(
               'w-4 h-4 transition-colors',
-              selected ? 'text-accent' : 'text-txt-muted'
+              selected ? 'text-[#004AFF]' : 'text-txt-muted'
             )} />
             <span className={cn(
               'text-[13px] font-medium transition-colors',

@@ -381,7 +381,7 @@ export const Mensagens: React.FC = () => {
             className={cn(
               'flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-200',
               activeTab === tab.key
-                ? 'bg-accent/10 text-accent border-glow shadow-sm'
+                ? 'bg-[#004AFF]/10 text-[#004AFF] border-glow shadow-sm'
                 : 'text-txt-muted hover:text-txt hover:bg-surface-200/30'
             )}
           >
@@ -658,7 +658,7 @@ export const Mensagens: React.FC = () => {
                 <select
                   value={createForm.status_alvo}
                   onChange={(e) => setCreateForm((p) => ({ ...p, status_alvo: e.target.value }))}
-                  className="w-full px-4 py-2.5 rounded-xl text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-accent/30 transition-colors appearance-none cursor-pointer"
+                  className="w-full px-4 py-2.5 rounded-xl text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-[#004AFF]/30 transition-colors appearance-none cursor-pointer"
                   style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', background: 'rgba(20, 20, 22, 0.6)' }}
                 >
                   <option value="" disabled>Selecione o status</option>
@@ -695,7 +695,7 @@ export const Mensagens: React.FC = () => {
                 <select
                   value={createForm.tipo_envio}
                   onChange={(e) => setCreateForm((p) => ({ ...p, tipo_envio: e.target.value }))}
-                  className="w-full px-4 py-2.5 rounded-xl text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-accent/30 transition-colors appearance-none cursor-pointer"
+                  className="w-full px-4 py-2.5 rounded-xl text-[13px] text-txt bg-surface outline-none border border-surface-200 focus:border-[#004AFF]/30 transition-colors appearance-none cursor-pointer"
                   style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center', background: 'rgba(20, 20, 22, 0.6)' }}
                 >
                   <option value="texto">Texto</option>

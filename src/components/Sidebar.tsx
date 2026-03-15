@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Users, Activity, Send, Trophy, MessageSquare, MessagesSquare, Phone, Settings, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { cn } from '../utils/cn';
+import LogoA from '../assets/Assinatura-A.svg';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -31,26 +32,37 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
       collapsed ? "w-[72px]" : "w-[260px]"
     )}>
       {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-accent/[0.02] to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#004AFF]/[0.02] to-transparent pointer-events-none" />
 
       <div className={cn("p-5 border-b border-surface-300/20 relative h-[73px] flex items-center", collapsed && "px-3")}>
-        <div className={cn("flex items-center", collapsed ? "justify-center" : "justify-between")}>
-          {!collapsed && (
-            <div>
-              <h1 className="text-sm font-bold text-txt tracking-tight font-display">Allan Cabral</h1>
-              <p className="text-[11px] text-txt-muted font-mono tracking-wide uppercase">Leads</p>
-            </div>
-          )}
-          <button
-            onClick={onToggle}
-            className={cn(
-              "p-1.5 text-txt-muted hover:text-txt hover:bg-surface-200/50 rounded-lg transition-all duration-200",
-              collapsed && "absolute -right-3 top-6 bg-surface-50 border border-surface-300/30 shadow-lg z-10"
+        <div className={cn("flex items-center w-full", collapsed ? "justify-center" : "justify-between")}>
+          <div className={cn("flex items-center gap-2.5", collapsed && "justify-center")}>
+            <img src={LogoA} alt="Logo" className={cn("shrink-0 transition-all duration-300", collapsed ? "w-10 h-10" : "w-9 h-9")} />
+            {!collapsed && (
+              <div>
+                <h1 className="text-sm font-bold text-txt tracking-tight font-display">Allan Cabral</h1>
+                <p className="text-[11px] text-[#A8A8B3] font-mono tracking-wide uppercase">Automações</p>
+              </div>
             )}
-            aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
-          >
-            {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
-          </button>
+          </div>
+          {!collapsed && (
+            <button
+              onClick={onToggle}
+              className="p-1.5 text-[#A8A8B3] hover:text-txt hover:bg-surface-200/50 rounded-lg transition-all duration-200"
+              aria-label="Recolher sidebar"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+          )}
+          {collapsed && (
+            <button
+              onClick={onToggle}
+              className="absolute -right-3 top-6 bg-surface-50 border border-surface-300/30 shadow-lg z-10 p-1.5 text-[#A8A8B3] hover:text-txt hover:bg-surface-200/50 rounded-lg transition-all duration-200"
+              aria-label="Expandir sidebar"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -63,19 +75,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
               "flex items-center px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200 group relative",
               collapsed && "justify-center px-2",
               isActive
-                ? "bg-accent/10 text-accent border-glow"
-                : "text-txt-secondary hover:bg-surface-200/40 hover:text-txt"
+                ? "bg-[#004AFF]/10 text-[#004AFF] border border-[#004AFF]/15 shadow-[inset_0_0_20px_rgba(0,74,255,0.03)]"
+                : "text-[#D4D4DB] hover:bg-surface-200/40 hover:text-txt"
             )}
           >
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-accent rounded-r-full" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-[#004AFF] rounded-r-full" />
                 )}
                 <item.icon className={cn(
                   "w-[18px] h-[18px] transition-colors duration-200",
                   !collapsed && "mr-3",
-                  isActive ? "text-accent" : "text-txt-muted group-hover:text-txt-secondary"
+                  isActive ? "text-[#004AFF]" : "text-[#A8A8B3] group-hover:text-[#D4D4DB]"
                 )} />
                 {!collapsed && <span>{item.label}</span>}
               </>
@@ -91,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
             navigate('/login', { replace: true });
           }}
           className={cn(
-            "flex items-center w-full px-3 py-2.5 rounded-xl text-[13px] font-medium text-txt-muted hover:bg-red-500/10 hover:text-red-400 transition-all duration-200",
+            "flex items-center w-full px-3 py-2.5 rounded-xl text-[13px] font-medium text-[#A8A8B3] hover:bg-red-500/10 hover:text-red-400 transition-all duration-200",
             collapsed && "justify-center px-2"
           )}
         >

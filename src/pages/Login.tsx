@@ -40,7 +40,7 @@ export const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-surface p-4 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-grid-pattern bg-[size:60px_60px] opacity-30" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/[0.03] rounded-full blur-[120px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#004AFF]/[0.03] rounded-full blur-[120px]" />
 
       <div className="w-full max-w-[400px] relative animate-slide-up">
         <div className="flex flex-col items-center mb-10">
